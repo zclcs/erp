@@ -1,4 +1,5 @@
-.db
+dbfile.mv.db
+dbfile.trace.db
 HELP.md
 .gradle
 build/
