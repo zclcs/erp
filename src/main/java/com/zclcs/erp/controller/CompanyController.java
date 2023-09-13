@@ -33,7 +33,7 @@ public class CompanyController {
      * @see CompanyService#page(BasePageAo)
      */
     @GetMapping("/page")
-    public BaseRsp<BasePage<Company>> findRolePage(@Validated BasePageAo basePageAo) {
+    public BaseRsp<BasePage<Company>> findCompanyPage(@Validated BasePageAo basePageAo) {
         BasePage<Company> page = this.companyService.page(basePageAo);
         return RspUtil.data(page);
     }
