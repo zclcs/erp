@@ -29,4 +29,4 @@ mybatis-flex:
     print-banner: false
   mapper-locations:
     - "classpath*:/mapper/**/*.xml"
-  type-aliases-package: com.zclcs.platform.system.api.bean.entity
+  type-aliases-package: com.zclcs.erp.api.bean.entity
