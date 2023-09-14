@@ -10,7 +10,6 @@ import org.apache.ibatis.annotations.Mapper;
  * @author zclcs
  * @since 2023-09-14 11:36:09.432
  */
-@Mapper
 public interface BillMapper extends BaseMapper<Bill> {
 
 }

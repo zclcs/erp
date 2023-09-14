@@ -21,6 +21,13 @@ spring:
 logging:
   level:
     com.zclcs.erp.configuration.MyBatisFlexConfiguration: debug
+    com.zaxxer: info
+    _org.springframework: info
+    org.springframework: info
+    org.hibernate: info
+    org.mybatis: info
+    org.apache.ibatis: info
+    org.jboss: info
 
 mybatis-flex:
   configuration:
@@ -28,5 +35,5 @@ mybatis-flex:
   global-config:
     print-banner: false
   mapper-locations:
-    - "classpath*:/mapper/**/*.xml"
+    - "classpath*:/mapper/*.xml"
   type-aliases-package: com.zclcs.erp.api.bean.entity

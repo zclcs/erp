@@ -10,7 +10,6 @@ import org.apache.ibatis.annotations.Mapper;
  * @author zclcs
  * @since 2023-09-14 11:36:17.891
  */
-@Mapper
 public interface PurchaseMapper extends BaseMapper<Purchase> {
 
 }

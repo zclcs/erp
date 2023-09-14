@@ -12,8 +12,8 @@
             <div class="layui-form-item">
                 <label class="layui-form-label">名称</label>
                 <div class="layui-input-block">
-                    <input type="text" name="name" lay-verify="title" autocomplete="off"
-                           placeholder="请输入标题" class="layui-input">
+                    <input type="text" name="name" lay-verify="required" autocomplete="off"
+                           placeholder="请输入名称" class="layui-input">
                 </div>
             </div>
             <div class="layui-form-item">
@@ -66,7 +66,7 @@
                     if (result.success) {
                         parent.layer.close(parent.layer.getFrameIndex(window
                             .name)); //关闭当前页
-                        parent.layui.table.reload("user-table");
+                        parent.layui.table.reload("page-table");
                         layer.msg(result.msg, {
                             icon: 1,
                             time: 1000

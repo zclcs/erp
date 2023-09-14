@@ -25,7 +25,6 @@ public class ErpRuntimeHintsRegistrar implements RuntimeHintsRegistrar {
         }
         hints.resources()
                 .registerPattern("mapper/*")
-                .registerPattern("static/*")
         ;
     }
 

@@ -10,7 +10,6 @@ import org.apache.ibatis.annotations.Mapper;
  * @author zclcs
  * @since 2023-09-14 11:36:32.023
  */
-@Mapper
 public interface OrdersMapper extends BaseMapper<Orders> {
 
 }

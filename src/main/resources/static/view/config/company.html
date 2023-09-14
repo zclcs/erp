@@ -32,7 +32,7 @@
 </div>
 <div class="layui-card">
     <div class="layui-card-body">
-        <table id="user-table" lay-filter="user-table"></table>
+        <table id="page-table" lay-filter="page-table"></table>
     </div>
 </div>
 
@@ -89,7 +89,7 @@
         ]
 
         table.render({
-            elem: '#user-table',
+            elem: '#page-table',
             url: '/company',
             page: true,
             cols: cols,
@@ -102,7 +102,7 @@
             }, 'filter', 'print', 'exports']
         });
 
-        table.on('tool(user-table)', function (obj) {
+        table.on('tool(page-table)', function (obj) {
             if (obj.event === 'remove') {
                 window.remove(obj);
             } else if (obj.event === 'edit') {
@@ -110,7 +110,7 @@
             }
         });
 
-        table.on('toolbar(user-table)', function (obj) {
+        table.on('toolbar(page-table)', function (obj) {
             if (obj.event === 'add') {
                 window.add();
             } else if (obj.event === 'refresh') {
@@ -121,7 +121,7 @@
         });
 
         form.on('submit(user-query)', function (data) {
-            table.reload('user-table', {
+            table.reload('page-table', {
                 where: data.field
             })
             return false;
@@ -166,7 +166,7 @@
                     success: function (result) {
                         layer.close(loading);
                         if (result.success) {
-                            table.reload("user-table");
+                            table.reload("page-table");
                             layer.msg(result.msg, {
                                 icon: 1,
                                 time: 1000
@@ -208,7 +208,7 @@
                     success: function (result) {
                         layer.close(loading);
                         if (result.success) {
-                            table.reload('user-table');
+                            table.reload('page-table');
                             layer.msg(result.msg, {
                                 icon: 1,
                                 time: 1000
@@ -225,7 +225,7 @@
         }
 
         window.refresh = function (param) {
-            table.reload('user-table');
+            table.reload('page-table');
         }
     })
 </script>

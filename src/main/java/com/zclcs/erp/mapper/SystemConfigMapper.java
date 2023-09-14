@@ -10,7 +10,6 @@ import org.apache.ibatis.annotations.Mapper;
  * @author zclcs
  * @since 2023-09-14 11:36:13.675
  */
-@Mapper
 public interface SystemConfigMapper extends BaseMapper<SystemConfig> {
 
 }
