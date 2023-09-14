@@ -15,10 +15,10 @@ import java.io.Serial;
 import java.io.Serializable;
 
 /**
- * 公司 Entity
+ * 产品 Entity
  *
  * @author zclcs
- * @since 2023-09-14 11:36:37.189
+ * @since 2023-09-14 11:36:26.807
  */
 @Data
 @AllArgsConstructor
@@ -26,20 +26,20 @@ import java.io.Serializable;
 @SuperBuilder
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-@Table("company")
-public class Company implements Serializable {
+@Table("product")
+public class Product implements Serializable {
 
     @Serial
     private static final long serialVersionUID = 1L;
 
     /**
-     * 公司表主键
+     * 产品编号
      */
     @Id(keyType = KeyType.Auto)
     private Long id;
 
     /**
-     * 公司名称
+     * 产品名称
      */
     @Column("name")
     private String name;

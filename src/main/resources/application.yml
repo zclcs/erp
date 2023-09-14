@@ -1,23 +1,13 @@
 spring:
   datasource:
     driver-class-name: org.h2.Driver
-    url: jdbc:h2:file:./dbfile
+    url: jdbc:h2:file:./db/dbfile
     username: root
     password: 123456
   h2:
     console:
       enabled: true
       path: /h2-console
-  jpa:
-    database-platform: org.hibernate.dialect.H2Dialect
-    hibernate:
-      ddl-auto: update
-    open-in-view: true
-    properties:
-      hibernate:
-        show_sql: true
-        use_sql_comments: true
-        format_sql: true
   mvc:
     static-path-pattern: /static/**
   web:
@@ -27,3 +17,16 @@ spring:
     rest:
       page-param-name: page
       limit-param-name: limit
+
+logging:
+  level:
+    com.zclcs.erp.configuration.MyBatisFlexConfiguration: debug
+
+mybatis-flex:
+  configuration:
+    log-impl: org.apache.ibatis.logging.nologging.NoLoggingImpl
+  global-config:
+    print-banner: false
+  mapper-locations:
+    - "classpath*:/mapper/**/*.xml"
+  type-aliases-package: com.zclcs.platform.system.api.bean.entity

@@ -1,22 +1,17 @@
-package com.zclcs.erp.api.bean.entity;
+package com.zclcs.erp.api.bean.ao;
 
-import com.mybatisflex.annotation.Column;
-import com.mybatisflex.annotation.Id;
-import com.mybatisflex.annotation.KeyType;
-import com.mybatisflex.annotation.Table;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import com.zclcs.erp.core.strategy.ValidGroups;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
+import lombok.*;
 import lombok.experimental.Accessors;
-import lombok.experimental.SuperBuilder;
 
 import java.io.Serial;
 import java.io.Serializable;
 import java.math.BigDecimal;
 
 /**
- * 对账单 Entity
+ * 对账单 Ao
  *
  * @author zclcs
  * @since 2023-09-14 11:36:09.432
@@ -24,49 +19,52 @@ import java.math.BigDecimal;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@SuperBuilder
+@Builder
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-@Table("bill")
-public class Bill implements Serializable {
+public class BillAo implements Serializable {
 
     @Serial
     private static final long serialVersionUID = 1L;
 
     /**
      * 对账表编号
+     * 默认值：
      */
-    @Id(keyType = KeyType.Auto)
+    @NotNull(message = "{required}", groups = {ValidGroups.Crud.Update.class})
     private Long id;
 
     /**
      * 公司编号
+     * 默认值：
      */
-    @Column("company_id")
     private Long companyId;
 
     /**
      * 公司名称
+     * 默认值：
      */
-    @Column("company_name")
+    @Size(max = 255, message = "{noMoreThan}")
     private String companyName;
 
     /**
      * 对账单生成日期
+     * 默认值：
      */
-    @Column("delivery_date")
+    @Size(max = 10, message = "{noMoreThan}")
     private String deliveryDate;
 
     /**
      * 对账单名称
+     * 默认值：
      */
-    @Column("name")
+    @Size(max = 255, message = "{noMoreThan}")
     private String name;
 
     /**
      * 总金额
+     * 默认值：
      */
-    @Column("total_amount")
     private BigDecimal totalAmount;
 
 

@@ -3,7 +3,7 @@ package com.zclcs;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-@SpringBootApplication
+@SpringBootApplication(proxyBeanMethods = false)
 public class ErpApplication {
 
     public static void main(String[] args) {

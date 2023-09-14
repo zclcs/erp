@@ -1,6 +1,7 @@
 package com.zclcs.erp.utils;
 
-import com.zclcs.erp.api.base.BaseRsp;
+import com.zclcs.erp.core.base.BasePage;
+import com.zclcs.erp.core.base.BaseRsp;
 import lombok.experimental.UtilityClass;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -19,38 +20,20 @@ public class RspUtil {
         return modelAndView;
     }
 
-    /**
-     * 成功不带参
-     *
-     * @return 返回json
-     */
     public <T> BaseRsp<T> message() {
-        return new BaseRsp<T>().setMsg("调用成功");
+        return new BaseRsp<>();
     }
 
-    /**
-     * 调用成功 - 消息体
-     *
-     * @param data 数据体
-     * @return 返回json
-     */
-    public <T> BaseRsp<T> message(T data) {
-        BaseRsp<T> vo = new BaseRsp<>();
-        vo.setData(data);
-        return vo;
+    public <T> BaseRsp<T> page(BasePage<T> page) {
+        return new BaseRsp<>(page);
     }
 
-    /**
-     * 调用成功 - 消息体
-     *
-     * @param data 数据体
-     * @return 返回json
-     */
-    public <T> BaseRsp<T> message(String msg, T data) {
-        BaseRsp<T> vo = new BaseRsp<>();
-        vo.setMsg(msg);
-        vo.setData(data);
-        return vo;
+    public <T> BaseRsp<T> data(T data) {
+        return new BaseRsp<>(data);
+    }
+
+    public <T> BaseRsp<T> message(String msg, BasePage<T> page) {
+        return new BaseRsp<>(msg, page);
     }
 
     /**
@@ -60,20 +43,7 @@ public class RspUtil {
      * @return 返回json
      */
     public <T> BaseRsp<T> message(String message) {
-        BaseRsp<T> vo = new BaseRsp<>();
-        vo.setMsg(message);
-        return vo;
+        return new BaseRsp<>(message);
     }
 
-    /**
-     * 调用成功 - 返回数据
-     *
-     * @param data 数据
-     * @return 返回json
-     */
-    public <T> BaseRsp<T> data(T data) {
-        BaseRsp<T> vo = new BaseRsp<>();
-        vo.setData(data);
-        return vo;
-    }
 }

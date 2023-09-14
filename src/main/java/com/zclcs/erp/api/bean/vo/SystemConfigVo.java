@@ -1,9 +1,5 @@
-package com.zclcs.erp.api.bean.entity;
+package com.zclcs.erp.api.bean.vo;
 
-import com.mybatisflex.annotation.Column;
-import com.mybatisflex.annotation.Id;
-import com.mybatisflex.annotation.KeyType;
-import com.mybatisflex.annotation.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -15,10 +11,10 @@ import java.io.Serial;
 import java.io.Serializable;
 
 /**
- * 公司 Entity
+ * 系统配置 Vo
  *
  * @author zclcs
- * @since 2023-09-14 11:36:37.189
+ * @since 2023-09-14 11:36:13.675
  */
 @Data
 @AllArgsConstructor
@@ -26,29 +22,34 @@ import java.io.Serializable;
 @SuperBuilder
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-@Table("company")
-public class Company implements Serializable {
+public class SystemConfigVo implements Serializable {
 
     @Serial
     private static final long serialVersionUID = 1L;
 
     /**
-     * 公司表主键
+     * 系统配置id
+     * 默认值：
      */
-    @Id(keyType = KeyType.Auto)
     private Long id;
 
     /**
-     * 公司名称
+     * 业务员
+     * 默认值：
      */
-    @Column("name")
-    private String name;
+    private String salesman;
 
     /**
-     * 备注
+     * 联系电话
+     * 默认值：
      */
-    @Column("remark")
-    private String remark;
+    private String phone;
+
+    /**
+     * 公司名
+     * 默认值：
+     */
+    private String title;
 
 
 }

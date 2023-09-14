@@ -15,10 +15,10 @@ import java.io.Serial;
 import java.io.Serializable;
 
 /**
- * 公司 Entity
+ * 对账单和子订单关联 Entity
  *
  * @author zclcs
- * @since 2023-09-14 11:36:37.189
+ * @since 2023-09-14 11:36:41.197
  */
 @Data
 @AllArgsConstructor
@@ -26,29 +26,29 @@ import java.io.Serializable;
 @SuperBuilder
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-@Table("company")
-public class Company implements Serializable {
+@Table("child_order_bill")
+public class ChildOrderBill implements Serializable {
 
     @Serial
     private static final long serialVersionUID = 1L;
 
     /**
-     * 公司表主键
+     * 对账表和子单的关联表
      */
     @Id(keyType = KeyType.Auto)
     private Long id;
 
     /**
-     * 公司名称
+     * 子单id
      */
-    @Column("name")
-    private String name;
+    @Column("child_order_id")
+    private Long childOrderId;
 
     /**
-     * 备注
+     * 对账单id
      */
-    @Column("remark")
-    private String remark;
+    @Column("bill_id")
+    private Long billId;
 
 
 }

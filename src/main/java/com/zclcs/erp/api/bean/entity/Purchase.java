@@ -13,12 +13,14 @@ import lombok.experimental.SuperBuilder;
 
 import java.io.Serial;
 import java.io.Serializable;
+import java.math.BigDecimal;
+import java.time.LocalDate;
 
 /**
- * 公司 Entity
+ * 进货单 Entity
  *
  * @author zclcs
- * @since 2023-09-14 11:36:37.189
+ * @since 2023-09-14 11:36:17.891
  */
 @Data
 @AllArgsConstructor
@@ -26,29 +28,41 @@ import java.io.Serializable;
 @SuperBuilder
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-@Table("company")
-public class Company implements Serializable {
+@Table("purchase")
+public class Purchase implements Serializable {
 
     @Serial
     private static final long serialVersionUID = 1L;
 
     /**
-     * 公司表主键
+     * 主键
      */
     @Id(keyType = KeyType.Auto)
     private Long id;
 
     /**
-     * 公司名称
+     * 进货公司id
      */
-    @Column("name")
-    private String name;
+    @Column("product_company_id")
+    private Long productCompanyId;
 
     /**
-     * 备注
+     * 进货公司名称
      */
-    @Column("remark")
-    private String remark;
+    @Column("product_company_name")
+    private String productCompanyName;
+
+    /**
+     * 进货日期
+     */
+    @Column("purchase_date")
+    private LocalDate purchaseDate;
+
+    /**
+     * 进货金额
+     */
+    @Column("purchase_amount")
+    private BigDecimal purchaseAmount;
 
 
 }

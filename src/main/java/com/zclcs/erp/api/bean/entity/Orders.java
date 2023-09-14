@@ -13,12 +13,13 @@ import lombok.experimental.SuperBuilder;
 
 import java.io.Serial;
 import java.io.Serializable;
+import java.time.LocalDate;
 
 /**
- * 公司 Entity
+ * 订单 Entity
  *
  * @author zclcs
- * @since 2023-09-14 11:36:37.189
+ * @since 2023-09-14 11:36:32.023
  */
 @Data
 @AllArgsConstructor
@@ -26,29 +27,41 @@ import java.io.Serializable;
 @SuperBuilder
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-@Table("company")
-public class Company implements Serializable {
+@Table("orders")
+public class Orders implements Serializable {
 
     @Serial
     private static final long serialVersionUID = 1L;
 
     /**
-     * 公司表主键
+     * 订单编号
      */
     @Id(keyType = KeyType.Auto)
     private Long id;
 
     /**
-     * 公司名称
+     * 公司编号
      */
-    @Column("name")
-    private String name;
+    @Column("company_id")
+    private Long companyId;
 
     /**
-     * 备注
+     * 公司名称
      */
-    @Column("remark")
-    private String remark;
+    @Column("company_name")
+    private String companyName;
+
+    /**
+     * 送货日期
+     */
+    @Column("delivery_date")
+    private LocalDate deliveryDate;
+
+    /**
+     * 状态 1 有效 0 删除
+     */
+    @Column("orders_status")
+    private Integer ordersStatus;
 
 
 }

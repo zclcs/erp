@@ -1,9 +1,5 @@
-package com.zclcs.erp.api.bean.entity;
+package com.zclcs.erp.api.bean.vo;
 
-import com.mybatisflex.annotation.Column;
-import com.mybatisflex.annotation.Id;
-import com.mybatisflex.annotation.KeyType;
-import com.mybatisflex.annotation.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -15,10 +11,10 @@ import java.io.Serial;
 import java.io.Serializable;
 
 /**
- * 公司 Entity
+ * 对账单和子订单关联 Vo
  *
  * @author zclcs
- * @since 2023-09-14 11:36:37.189
+ * @since 2023-09-14 11:36:41.197
  */
 @Data
 @AllArgsConstructor
@@ -26,29 +22,28 @@ import java.io.Serializable;
 @SuperBuilder
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-@Table("company")
-public class Company implements Serializable {
+public class ChildOrderBillVo implements Serializable {
 
     @Serial
     private static final long serialVersionUID = 1L;
 
     /**
-     * 公司表主键
+     * 对账表和子单的关联表
+     * 默认值：
      */
-    @Id(keyType = KeyType.Auto)
     private Long id;
 
     /**
-     * 公司名称
+     * 子单id
+     * 默认值：
      */
-    @Column("name")
-    private String name;
+    private Long childOrderId;
 
     /**
-     * 备注
+     * 对账单id
+     * 默认值：
      */
-    @Column("remark")
-    private String remark;
+    private Long billId;
 
 
 }
