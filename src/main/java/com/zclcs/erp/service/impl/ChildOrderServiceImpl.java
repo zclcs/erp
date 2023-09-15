@@ -71,7 +71,8 @@ public class ChildOrderServiceImpl extends ServiceImpl<ChildOrderMapper, ChildOr
                 CHILD_ORDER.AMOUNT,
                 CHILD_ORDER.REMARK,
                 CHILD_ORDER.CHILD_ORDER_STATUS
-        );
+        ).where(CHILD_ORDER.ORDERS_ID.eq(childOrderVo.getOrdersId()))
+        ;
         // TODO 设置公共查询条件
         return queryWrapper;
     }

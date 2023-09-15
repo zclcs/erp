@@ -2,6 +2,7 @@ package com.zclcs.erp.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
 import com.mybatisflex.core.paginate.Page;
+import com.mybatisflex.core.query.If;
 import com.mybatisflex.core.query.QueryWrapper;
 import com.mybatisflex.spring.service.impl.ServiceImpl;
 import com.zclcs.erp.api.bean.ao.ProductCompanyAo;
@@ -9,6 +10,7 @@ import com.zclcs.erp.api.bean.entity.ProductCompany;
 import com.zclcs.erp.api.bean.vo.ProductCompanyVo;
 import com.zclcs.erp.core.base.BasePage;
 import com.zclcs.erp.core.base.BasePageAo;
+import com.zclcs.erp.exception.FieldException;
 import com.zclcs.erp.mapper.ProductCompanyMapper;
 import com.zclcs.erp.service.ProductCompanyService;
 import lombok.RequiredArgsConstructor;
@@ -60,17 +62,20 @@ public class ProductCompanyServiceImpl extends ServiceImpl<ProductCompanyMapper,
     private QueryWrapper getQueryWrapper(ProductCompanyVo productCompanyVo) {
         QueryWrapper queryWrapper = new QueryWrapper();
         queryWrapper.select(
-                PRODUCT_COMPANY.ID,
-                PRODUCT_COMPANY.NAME,
-                PRODUCT_COMPANY.REMARK
-        );
-        // TODO 设置公共查询条件
+                        PRODUCT_COMPANY.ID,
+                        PRODUCT_COMPANY.NAME,
+                        PRODUCT_COMPANY.REMARK
+                )
+                .where(PRODUCT_COMPANY.NAME.like(productCompanyVo.getName(), If::hasText))
+                .orderBy(PRODUCT_COMPANY.ID.desc())
+        ;
         return queryWrapper;
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
     public ProductCompany createProductCompany(ProductCompanyAo productCompanyAo) {
+        validateName(productCompanyAo.getName(), productCompanyAo.getId());
         ProductCompany productCompany = new ProductCompany();
         BeanUtil.copyProperties(productCompanyAo, productCompany);
         this.save(productCompany);
@@ -80,6 +85,7 @@ public class ProductCompanyServiceImpl extends ServiceImpl<ProductCompanyMapper,
     @Override
     @Transactional(rollbackFor = Exception.class)
     public ProductCompany updateProductCompany(ProductCompanyAo productCompanyAo) {
+        validateName(productCompanyAo.getName(), productCompanyAo.getId());
         ProductCompany productCompany = new ProductCompany();
         BeanUtil.copyProperties(productCompanyAo, productCompany);
         this.updateById(productCompany);
@@ -134,6 +140,14 @@ public class ProductCompanyServiceImpl extends ServiceImpl<ProductCompanyMapper,
     @Transactional(rollbackFor = Exception.class)
     public void deleteProductCompany(List<Long> ids) {
         this.removeByIds(ids);
+    }
+
+    @Override
+    public void validateName(String name, Long id) {
+        ProductCompany one = this.queryChain().where(PRODUCT_COMPANY.NAME.eq(name)).one();
+        if (one != null && !one.getId().equals(id)) {
+            throw new FieldException("进货公司名称重复");
+        }
     }
 
 }

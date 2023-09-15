@@ -42,9 +42,9 @@ public class ProductCompanyController {
      * @see ProductCompanyService#findProductCompanyPage(BasePageAo, ProductCompanyVo)
      */
     @GetMapping
-    public BaseRsp<BasePage<ProductCompanyVo>> findProductCompanyPage(@Validated BasePageAo basePageAo, @Validated ProductCompanyVo productCompanyVo) {
+    public BaseRsp<ProductCompanyVo> findProductCompanyPage(@Validated BasePageAo basePageAo, @Validated ProductCompanyVo productCompanyVo) {
         BasePage<ProductCompanyVo> page = this.productCompanyService.findProductCompanyPage(basePageAo, productCompanyVo);
-        return RspUtil.data(page);
+        return RspUtil.page(page);
     }
 
     /**
@@ -150,6 +150,20 @@ public class ProductCompanyController {
     @PostMapping("/createOrUpdate/batch")
     public BaseRsp<List<ProductCompany>> createOrUpdateProductCompanyBatch(@RequestBody @Validated ValidatedList<ProductCompanyAo> productCompanyAos) {
         return RspUtil.data(this.productCompanyService.createOrUpdateProductCompanyBatch(productCompanyAos));
+    }
+
+    /**
+     * 检查进货公司名称
+     *
+     * @param id   进货公司id
+     * @param name 进货公司名称
+     * @return 是否成功
+     */
+    @GetMapping("/checkName")
+    public BaseRsp<Object> checkName(@RequestParam(required = false) Long id,
+                                     @NotBlank(message = "{required}") @RequestParam String name) {
+        productCompanyService.validateName(name, id);
+        return RspUtil.message();
     }
 
 }

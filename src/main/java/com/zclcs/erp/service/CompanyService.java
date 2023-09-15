@@ -107,4 +107,11 @@ public interface CompanyService extends IService<Company> {
      */
     void deleteCompany(List<Long> ids);
 
+    /**
+     * 验证公司名称是否重复
+     *
+     * @param name 名称
+     * @param id   id
+     */
+    void validateCompanyName(String name, Long id);
 }

@@ -94,5 +94,21 @@ public class ChildOrderVo implements Serializable {
      */
     private Integer childOrderStatus;
 
+    /**
+     * kg/桶
+     */
+    private String specificationString;
 
+    /**
+     * kg
+     */
+    private String weightString;
+
+    public String getSpecificationString() {
+        return this.specification == null ? null : this.specification + "kg/桶";
+    }
+
+    public String getWeightString() {
+        return this.weight == null ? null : this.weight + "kg";
+    }
 }

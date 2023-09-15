@@ -21,7 +21,6 @@ public class MyBatisFlexConfiguration implements MyBatisFlexCustomizer {
 
     @Override
     public void customize(FlexGlobalConfig globalConfig) {
-
         FlexGlobalConfig config = FlexGlobalConfig.getDefaultConfig();
         config.setDbType(DbType.H2);
 

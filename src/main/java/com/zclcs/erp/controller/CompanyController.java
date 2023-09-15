@@ -9,7 +9,6 @@ import com.zclcs.erp.core.base.BaseRsp;
 import com.zclcs.erp.core.bean.ValidatedList;
 import com.zclcs.erp.core.constant.Strings;
 import com.zclcs.erp.core.strategy.ValidGroups;
-import com.zclcs.erp.mapper.CompanyMapper;
 import com.zclcs.erp.service.CompanyService;
 import com.zclcs.erp.utils.RspUtil;
 import jakarta.validation.constraints.NotBlank;
@@ -38,7 +37,6 @@ public class CompanyController {
 
     /**
      * 公司查询（分页）
-     * 权限: company:page
      *
      * @see CompanyService#findCompanyPage(BasePageAo, CompanyVo)
      */
@@ -50,7 +48,6 @@ public class CompanyController {
 
     /**
      * 公司查询（集合）
-     * 权限: company:list
      *
      * @see CompanyService#findCompanyList(CompanyVo)
      */
@@ -62,7 +59,6 @@ public class CompanyController {
 
     /**
      * 公司查询（单个）
-     * 权限: company:one
      *
      * @see CompanyService#findCompany(CompanyVo)
      */
@@ -74,7 +70,6 @@ public class CompanyController {
 
     /**
      * 新增公司
-     * 权限: company:add
      *
      * @see CompanyService#createCompany(CompanyAo)
      */
@@ -85,7 +80,6 @@ public class CompanyController {
 
     /**
      * 修改公司
-     * 权限: company:update
      *
      * @see CompanyService#updateCompany(CompanyAo)
      */
@@ -96,7 +90,6 @@ public class CompanyController {
 
     /**
      * 新增或修改公司
-     * 权限: company:createOrUpdate
      *
      * @see CompanyService#createOrUpdateCompany(CompanyAo)
      */
@@ -107,7 +100,6 @@ public class CompanyController {
 
     /**
      * 删除公司
-     * 权限: company:delete
      *
      * @param companyIds 公司id集合(,分隔)
      * @see CompanyService#deleteCompany(List)
@@ -121,7 +113,6 @@ public class CompanyController {
 
     /**
      * 批量新增公司
-     * 权限: company:add:batch
      *
      * @see CompanyService#createCompanyBatch(List)
      */
@@ -132,7 +123,6 @@ public class CompanyController {
 
     /**
      * 批量修改公司
-     * 权限: company:update:batch
      *
      * @see CompanyService#createOrUpdateCompanyBatch(List)
      */
@@ -144,13 +134,26 @@ public class CompanyController {
     /**
      * 批量新增或修改公司
      * id为空则新增，不为空则修改
-     * 权限: company:createOrUpdate:batch
      *
      * @see CompanyService#createOrUpdateCompanyBatch(List)
      */
     @PostMapping("/createOrUpdate/batch")
     public BaseRsp<List<Company>> createOrUpdateCompanyBatch(@RequestBody @Validated ValidatedList<CompanyAo> companyAos) {
         return RspUtil.data(this.companyService.createOrUpdateCompanyBatch(companyAos));
+    }
+
+    /**
+     * 检查公司名称
+     *
+     * @param id   公司id
+     * @param name 公司名称
+     * @return 是否成功
+     */
+    @GetMapping("/checkName")
+    public BaseRsp<Object> checkName(@RequestParam(required = false) Long id,
+                                     @NotBlank(message = "{required}") @RequestParam String name) {
+        companyService.validateCompanyName(name, id);
+        return RspUtil.message();
     }
 
 }

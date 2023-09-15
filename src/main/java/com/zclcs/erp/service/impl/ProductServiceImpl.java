@@ -2,6 +2,7 @@ package com.zclcs.erp.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
 import com.mybatisflex.core.paginate.Page;
+import com.mybatisflex.core.query.If;
 import com.mybatisflex.core.query.QueryWrapper;
 import com.mybatisflex.spring.service.impl.ServiceImpl;
 import com.zclcs.erp.api.bean.ao.ProductAo;
@@ -9,6 +10,7 @@ import com.zclcs.erp.api.bean.entity.Product;
 import com.zclcs.erp.api.bean.vo.ProductVo;
 import com.zclcs.erp.core.base.BasePage;
 import com.zclcs.erp.core.base.BasePageAo;
+import com.zclcs.erp.exception.FieldException;
 import com.zclcs.erp.mapper.ProductMapper;
 import com.zclcs.erp.service.ProductService;
 import lombok.RequiredArgsConstructor;
@@ -60,17 +62,20 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
     private QueryWrapper getQueryWrapper(ProductVo productVo) {
         QueryWrapper queryWrapper = new QueryWrapper();
         queryWrapper.select(
-                PRODUCT.ID,
-                PRODUCT.NAME,
-                PRODUCT.REMARK
-        );
-        // TODO 设置公共查询条件
+                        PRODUCT.ID,
+                        PRODUCT.NAME,
+                        PRODUCT.REMARK
+                )
+                .where(PRODUCT.NAME.like(productVo.getName(), If::hasText))
+                .orderBy(PRODUCT.ID.desc())
+        ;
         return queryWrapper;
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
     public Product createProduct(ProductAo productAo) {
+        validateName(productAo.getName(), productAo.getId());
         Product product = new Product();
         BeanUtil.copyProperties(productAo, product);
         this.save(product);
@@ -80,6 +85,7 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
     @Override
     @Transactional(rollbackFor = Exception.class)
     public Product updateProduct(ProductAo productAo) {
+        validateName(productAo.getName(), productAo.getId());
         Product product = new Product();
         BeanUtil.copyProperties(productAo, product);
         this.updateById(product);
@@ -134,6 +140,14 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
     @Transactional(rollbackFor = Exception.class)
     public void deleteProduct(List<Long> ids) {
         this.removeByIds(ids);
+    }
+
+    @Override
+    public void validateName(String name, Long id) {
+        Product one = this.queryChain().where(PRODUCT.NAME.eq(name)).one();
+        if (one != null && !one.getId().equals(id)) {
+            throw new FieldException("产品名称重复");
+        }
     }
 
 }

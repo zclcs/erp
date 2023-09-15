@@ -42,9 +42,9 @@ public class ProductController {
      * @see ProductService#findProductPage(BasePageAo, ProductVo)
      */
     @GetMapping
-    public BaseRsp<BasePage<ProductVo>> findProductPage(@Validated BasePageAo basePageAo, @Validated ProductVo productVo) {
+    public BaseRsp<ProductVo> findProductPage(@Validated BasePageAo basePageAo, @Validated ProductVo productVo) {
         BasePage<ProductVo> page = this.productService.findProductPage(basePageAo, productVo);
-        return RspUtil.data(page);
+        return RspUtil.page(page);
     }
 
     /**
@@ -150,6 +150,20 @@ public class ProductController {
     @PostMapping("/createOrUpdate/batch")
     public BaseRsp<List<Product>> createOrUpdateProductBatch(@RequestBody @Validated ValidatedList<ProductAo> productAos) {
         return RspUtil.data(this.productService.createOrUpdateProductBatch(productAos));
+    }
+
+    /**
+     * 检查产品名称
+     *
+     * @param id   产品id
+     * @param name 产品名称
+     * @return 是否成功
+     */
+    @GetMapping("/checkName")
+    public BaseRsp<Object> checkName(@RequestParam(required = false) Long id,
+                                     @NotBlank(message = "{required}") @RequestParam String name) {
+        productService.validateName(name, id);
+        return RspUtil.message();
     }
 
 }

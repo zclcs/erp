@@ -42,9 +42,9 @@ public class BillController {
      * @see BillService#findBillPage(BasePageAo, BillVo)
      */
     @GetMapping
-    public BaseRsp<BasePage<BillVo>> findBillPage(@Validated BasePageAo basePageAo, @Validated BillVo billVo) {
+    public BaseRsp<BillVo> findBillPage(@Validated BasePageAo basePageAo, @Validated BillVo billVo) {
         BasePage<BillVo> page = this.billService.findBillPage(basePageAo, billVo);
-        return RspUtil.data(page);
+        return RspUtil.page(page);
     }
 
     /**

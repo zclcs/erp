@@ -12,6 +12,7 @@ import com.zclcs.erp.core.strategy.ValidGroups;
 import com.zclcs.erp.service.OrdersService;
 import com.zclcs.erp.utils.RspUtil;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.annotation.Validated;
@@ -42,9 +43,9 @@ public class OrdersController {
      * @see OrdersService#findOrdersPage(BasePageAo, OrdersVo)
      */
     @GetMapping
-    public BaseRsp<BasePage<OrdersVo>> findOrdersPage(@Validated BasePageAo basePageAo, @Validated OrdersVo ordersVo) {
+    public BaseRsp<OrdersVo> findOrdersPage(@Validated BasePageAo basePageAo, @Validated OrdersVo ordersVo) {
         BasePage<OrdersVo> page = this.ordersService.findOrdersPage(basePageAo, ordersVo);
-        return RspUtil.data(page);
+        return RspUtil.page(page);
     }
 
     /**
@@ -150,6 +151,11 @@ public class OrdersController {
     @PostMapping("/createOrUpdate/batch")
     public BaseRsp<List<Orders>> createOrUpdateOrdersBatch(@RequestBody @Validated ValidatedList<OrdersAo> ordersAos) {
         return RspUtil.data(this.ordersService.createOrUpdateOrdersBatch(ordersAos));
+    }
+
+    @GetMapping("/exportOrders")
+    public void exportOrders(@NotNull(message = "{required}") @RequestParam Long id) {
+        ordersService.exportOrders(id);
     }
 
 }

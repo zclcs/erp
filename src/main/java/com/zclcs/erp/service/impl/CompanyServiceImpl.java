@@ -10,6 +10,7 @@ import com.zclcs.erp.api.bean.entity.Company;
 import com.zclcs.erp.api.bean.vo.CompanyVo;
 import com.zclcs.erp.core.base.BasePage;
 import com.zclcs.erp.core.base.BasePageAo;
+import com.zclcs.erp.exception.FieldException;
 import com.zclcs.erp.mapper.CompanyMapper;
 import com.zclcs.erp.service.CompanyService;
 import lombok.RequiredArgsConstructor;
@@ -66,13 +67,15 @@ public class CompanyServiceImpl extends ServiceImpl<CompanyMapper, Company> impl
                         COMPANY.REMARK
                 )
                 .where(COMPANY.NAME.like(companyVo.getName(), If::hasText))
-                .orderBy(COMPANY.ID.desc());
+                .orderBy(COMPANY.ID.desc())
+        ;
         return queryWrapper;
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
     public Company createCompany(CompanyAo companyAo) {
+        validateCompanyName(companyAo.getName(), companyAo.getId());
         Company company = new Company();
         BeanUtil.copyProperties(companyAo, company);
         this.save(company);
@@ -82,6 +85,7 @@ public class CompanyServiceImpl extends ServiceImpl<CompanyMapper, Company> impl
     @Override
     @Transactional(rollbackFor = Exception.class)
     public Company updateCompany(CompanyAo companyAo) {
+        validateCompanyName(companyAo.getName(), companyAo.getId());
         Company company = new Company();
         BeanUtil.copyProperties(companyAo, company);
         this.updateById(company);
@@ -136,6 +140,14 @@ public class CompanyServiceImpl extends ServiceImpl<CompanyMapper, Company> impl
     @Transactional(rollbackFor = Exception.class)
     public void deleteCompany(List<Long> ids) {
         this.removeByIds(ids);
+    }
+
+    @Override
+    public void validateCompanyName(String name, Long id) {
+        Company one = this.queryChain().where(COMPANY.NAME.eq(name)).one();
+        if (one != null && !one.getId().equals(id)) {
+            throw new FieldException("公司名称重复");
+        }
     }
 
 }

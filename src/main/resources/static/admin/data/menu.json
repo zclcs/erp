@@ -12,7 +12,48 @@
         "icon": "layui-icon layui-icon-face-smile",
         "type": 1,
         "openType": "_iframe",
-        "href": "view/config/company.html"
+        "href": "view/config/company/company.html"
+      },
+      {
+        "id": "configProduct",
+        "title": "产品设置",
+        "icon": "layui-icon layui-icon-face-smile",
+        "type": 1,
+        "openType": "_iframe",
+        "href": "view/config/product/product.html"
+      },
+      {
+        "id": "configProductCompany",
+        "title": "进货公司设置",
+        "icon": "layui-icon layui-icon-face-smile",
+        "type": 1,
+        "openType": "_iframe",
+        "href": "view/config/productCompany/productCompany.html"
+      }
+    ]
+  },
+  {
+    "id": "billing",
+    "title": "开单",
+    "icon": "layui-icon layui-icon-set-fill",
+    "type": 0,
+    "href": "",
+    "children": [
+      {
+        "id": "billingOrder",
+        "title": "送货单",
+        "icon": "layui-icon layui-icon-face-smile",
+        "type": 1,
+        "openType": "_iframe",
+        "href": "view/billing/order/order.html"
+      },
+      {
+        "id": "billingBill",
+        "title": "对账单",
+        "icon": "layui-icon layui-icon-face-smile",
+        "type": 1,
+        "openType": "_iframe",
+        "href": "view/config/bill/bill.html"
       }
     ]
   },

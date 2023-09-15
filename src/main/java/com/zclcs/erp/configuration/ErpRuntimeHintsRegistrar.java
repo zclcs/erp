@@ -24,6 +24,8 @@ public class ErpRuntimeHintsRegistrar implements RuntimeHintsRegistrar {
             hints.reflection().registerType(aClass, MemberCategory.values());
         }
         hints.resources()
+                .registerPattern("banner.txt")
+                .registerPattern("ValidationMessages.properties")
                 .registerPattern("mapper/*")
         ;
     }

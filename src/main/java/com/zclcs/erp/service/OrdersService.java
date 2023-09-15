@@ -107,4 +107,10 @@ public interface OrdersService extends IService<Orders> {
      */
     void deleteOrders(List<Long> ids);
 
+    /**
+     * 生成送货单
+     *
+     * @param id id
+     */
+    void exportOrders(Long id);
 }

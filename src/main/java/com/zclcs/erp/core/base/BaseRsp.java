@@ -45,6 +45,12 @@ public class BaseRsp<T> {
         this.msg = msg;
     }
 
+    public BaseRsp(Integer code, String msg) {
+        this();
+        this.code = code;
+        this.msg = msg;
+    }
+
     public BaseRsp(T bean) {
         this();
         this.bean = bean;

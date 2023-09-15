@@ -9,6 +9,7 @@ import lombok.experimental.SuperBuilder;
 
 import java.io.Serial;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 /**
@@ -53,10 +54,20 @@ public class OrdersVo implements Serializable {
     private LocalDate deliveryDate;
 
     /**
+     * 送货日期-月份-前端条件
+     */
+    private String deliveryDateMonth;
+
+    /**
      * 状态 1 有效 0 删除
      * 默认值：
      */
     private Integer ordersStatus;
+
+    /**
+     * 总金额
+     */
+    private BigDecimal totalAmount;
 
 
 }

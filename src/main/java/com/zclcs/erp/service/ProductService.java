@@ -107,4 +107,11 @@ public interface ProductService extends IService<Product> {
      */
     void deleteProduct(List<Long> ids);
 
+    /**
+     * 验证产品名称
+     *
+     * @param name 名称
+     * @param id   id
+     */
+    void validateName(String name, Long id);
 }

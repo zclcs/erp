@@ -46,4 +46,8 @@ public class RspUtil {
         return new BaseRsp<>(message);
     }
 
+    public <T> BaseRsp<T> error(Integer code, String message) {
+        return new BaseRsp<>(code, message);
+    }
+
 }
