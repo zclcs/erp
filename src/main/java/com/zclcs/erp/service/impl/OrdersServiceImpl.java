@@ -207,7 +207,7 @@ public class OrdersServiceImpl extends ServiceImpl<OrdersMapper, Orders> impleme
         dataMap.put("ordersList", childOrderList);
         try {
             File file = GenDocUtil.genDoc(this.getClass(), "order.ftl", dataMap);
-            WebUtil.download(file, orders.getCompanyName() + orders.getDeliveryDate().format(DatePattern.NORM_DATE_FORMATTER) + "送货单.doc", true);
+            WebUtil.download(file, orders.getCompanyName() + "-" + orders.getDeliveryDate().format(DatePattern.NORM_DATE_FORMATTER) + "-" + "送货单.doc", true);
         } catch (Exception e) {
             log.error(e.getMessage(), e);
             throw new MyException("文件生成异常");
