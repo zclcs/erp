@@ -17,8 +17,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
@@ -42,9 +45,17 @@ public class PurchaseController {
      * @see PurchaseService#findPurchasePage(BasePageAo, PurchaseVo)
      */
     @GetMapping
-    public BaseRsp<BasePage<PurchaseVo>> findPurchasePage(@Validated BasePageAo basePageAo, @Validated PurchaseVo purchaseVo) {
+    public BaseRsp<PurchaseVo> findPurchasePage(@Validated BasePageAo basePageAo, @Validated PurchaseVo purchaseVo) {
         BasePage<PurchaseVo> page = this.purchaseService.findPurchasePage(basePageAo, purchaseVo);
-        return RspUtil.data(page);
+        Map<String, Object> totalRow = new HashMap<>(1);
+        BigDecimal purchaseAmount = new BigDecimal("0");
+        for (PurchaseVo vo : page.getList()) {
+            if (vo.getPurchaseAmount() != null) {
+                purchaseAmount = purchaseAmount.add(vo.getPurchaseAmount());
+            }
+        }
+        totalRow.put("purchaseAmount", purchaseAmount);
+        return RspUtil.page(page, totalRow);
     }
 
     /**

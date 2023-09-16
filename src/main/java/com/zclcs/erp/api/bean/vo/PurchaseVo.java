@@ -59,5 +59,11 @@ public class PurchaseVo implements Serializable {
      */
     private BigDecimal purchaseAmount;
 
+    /**
+     * 进货日期
+     * 默认值：
+     */
+    private String purchaseDateMonth;
+
 
 }

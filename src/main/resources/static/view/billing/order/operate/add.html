@@ -10,18 +10,18 @@
     <div class="mainBox">
         <div class="main-container">
             <div class="layui-form-item">
-                <label class="layui-form-label">名称</label>
+                <label class="layui-form-label">公司名称</label>
                 <div class="layui-input-block">
-                    <input type="text" name="name" lay-verify="required|name" autocomplete="off"
-                           placeholder="请输入名称"
-                           lay-msg="名称必填" class="layui-input">
+                    <select name="companyId" id="companyId" lay-verify="requiredSelect" lay-search>
+                        <option value="">直接选择或搜索选择</option>
+                    </select>
                     <span class="layui-font-red"></span>
                 </div>
             </div>
             <div class="layui-form-item">
-                <label class="layui-form-label">备注</label>
-                <div class="layui-input-block">
-                    <input type="text" name="remark" autocomplete="off" placeholder="请输入备注"
+                <label class="layui-form-label">送货日期</label>
+                <div class="layui-input-inline">
+                    <input id="date-piker" type="text" lay-verify="required" name="deliveryDate" placeholder="请选择送货日期"
                            class="layui-input">
                     <span class="layui-font-red"></span>
                 </div>
@@ -48,46 +48,48 @@
     layui.use(['form', 'jquery'], function () {
         let form = layui.form;
         let $ = layui.jquery;
+        var layDate = layui.laydate;
+
+        layDate.render({
+            elem: '#date-piker'
+        });
+
+        $.ajax({
+            url: '/company/list',
+            dataType: 'json', //服务器返回json格式数据
+            type: 'get', //HTTP请求类型
+            async: false,
+            success: function(result) {
+                $.each(result.bean, function (index, value) {
+                    $('#companyId').append(new Option(value.name,value.id));// 下拉菜单里添加元素
+                });
+                form.render("select");
+            }
+        });
 
         form.verify({
+            requiredSelect: function (value, item) {
+                var othis = $(item);
+                if(!value){
+                    othis.next().next().html(othis.attr('lay-msg') || '必填项不能为空'); // 在表单旁边给出提示语
+                    return true; // 返回 true 阻止 form 组件内部默认的提示方式
+                }
+                othis.next().next().empty();
+            },
             required: function (value, item) {
                 var othis = $(item);
                 if (!value) {
-                    othis.next().html(othis.attr('lay-msg') || '必填项不能为空'); // 在表单旁边给出提示语
+                    othis.next("span").html(othis.attr('lay-msg') || '必填项不能为空'); // 在表单旁边给出提示语
                     return true; // 返回 true 阻止 form 组件内部默认的提示方式
                 }
                 othis.next().empty();
             },
-            name: function (value, item) { //value：表单的值、item：表单的DOM对象
-                var othis = $(item);
-                if (!value) return; // 非必填
-                var checkResult = "";
-
-                $.ajax({
-                    url: '/company/checkName',
-                    data: {
-                        name: value
-                    },
-                    dataType: 'json',
-                    async: false,
-                    success: function (result) {
-                        if (result.success === false) {
-                            checkResult = result.msg;
-                        }
-                    }
-                })
-                if (checkResult !== "") {
-                    othis.next().html(checkResult); // 在表单旁边给出提示语
-                    return true; // 返回 true 阻止 form 组件内部默认的提示方式
-                }
-                othis.next().empty();
-            }
-
         });
 
         form.on('submit(user-save)', function (data) {
+            data.field.ordersStatus = 1;
             $.ajax({
-                url: '/company',
+                url: '/orders',
                 data: JSON.stringify(data.field),
                 dataType: 'json',
                 contentType: 'application/json',

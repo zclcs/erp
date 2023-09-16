@@ -43,6 +43,22 @@ public interface ChildOrderService extends IService<ChildOrder> {
     ChildOrderVo findChildOrder(ChildOrderVo childOrderVo);
 
     /**
+     * 根据对账单id查询子订单
+     *
+     * @param billId 对账单id
+     * @return 子订单
+     */
+    BasePage<ChildOrderVo> findChildOrderListByBillIdPage(BasePageAo basePageAo, Long billId);
+
+    /**
+     * 根据对账单id查询子订单
+     *
+     * @param billId 对账单id
+     * @return 子订单
+     */
+    List<ChildOrderVo> findChildOrderListByBillIdList(Long billId);
+
+    /**
      * 统计
      *
      * @param childOrderVo {@link ChildOrderVo}

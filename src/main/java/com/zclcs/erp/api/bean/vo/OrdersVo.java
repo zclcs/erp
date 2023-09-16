@@ -1,5 +1,6 @@
 package com.zclcs.erp.api.bean.vo;
 
+import cn.hutool.core.util.StrUtil;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -11,6 +12,8 @@ import java.io.Serial;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 订单 Vo
@@ -69,5 +72,16 @@ public class OrdersVo implements Serializable {
      */
     private BigDecimal totalAmount;
 
+    public BigDecimal getTotalAmount() {
+        return this.totalAmount = totalAmount == null ? new BigDecimal("0") : totalAmount;
+    }
 
+    /**
+     * 所有子订单id
+     */
+    private String totalChildOrderId;
+
+    public List<Long> getTotalChildOrderId() {
+        return StrUtil.isNotBlank(totalChildOrderId) ? StrUtil.split(totalChildOrderId, StrUtil.COMMA).stream().map(Long::valueOf).toList() : new ArrayList<>();
+    }
 }

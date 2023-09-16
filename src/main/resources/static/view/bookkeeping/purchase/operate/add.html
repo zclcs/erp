@@ -2,27 +2,37 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>修改页面</title>
+    <title>新增页面</title>
     <link rel="stylesheet" href="../../../../component/pear/css/pear.css"/>
 </head>
 <body>
-<form class="layui-form" action="" lay-filter="edit-form">
+<form class="layui-form" action="">
     <div class="mainBox">
         <div class="main-container">
             <div class="layui-form-item">
-                <label class="layui-form-label">公司名称</label>
+                <label class="layui-form-label">进货公司</label>
                 <div class="layui-input-block">
-                    <select name="companyId" id="companyId" lay-verify="requiredSelect" lay-search>
+                    <select name="productCompanyId" id="productCompanyId" lay-verify="requiredSelect" lay-search>
                         <option value="">直接选择或搜索选择</option>
                     </select>
                     <span class="layui-font-red"></span>
                 </div>
             </div>
             <div class="layui-form-item">
-                <label class="layui-form-label">送货日期</label>
+                <label class="layui-form-label">进货日期</label>
                 <div class="layui-input-inline">
-                    <input id="date-piker" type="text" lay-verify="required" name="deliveryDate" placeholder="请选择送货日期"
+                    <input id="date-piker" type="text" lay-verify="required" name="purchaseDate"
+                           placeholder="请选择进货日期"
                            class="layui-input">
+                    <span class="layui-font-red"></span>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">金额</label>
+                <div class="layui-input-block">
+                    <input type="text" name="purchaseAmount" lay-verify="required" autocomplete="off"
+                           placeholder="请输入金额"
+                           lay-msg="金额必填" class="layui-input">
                     <span class="layui-font-red"></span>
                 </div>
             </div>
@@ -48,7 +58,6 @@
     layui.use(['form', 'jquery'], function () {
         let form = layui.form;
         let $ = layui.jquery;
-        let id = parent.updateData.data.id
         var layDate = layui.laydate;
 
         layDate.render({
@@ -56,27 +65,22 @@
         });
 
         $.ajax({
-            url: '/company/list',
+            url: '/productCompany/list',
             dataType: 'json', //服务器返回json格式数据
             type: 'get', //HTTP请求类型
             async: false,
-            success: function(result) {
+            success: function (result) {
                 $.each(result.bean, function (index, value) {
-                    $('#companyId').append(new Option(value.name,value.id));// 下拉菜单里添加元素
+                    $('#productCompanyId').append(new Option(value.name, value.id));// 下拉菜单里添加元素
                 });
                 form.render("select");
             }
         });
 
-        form.val('edit-form', {
-            "companyId": parent.updateData.data.companyId,
-            "deliveryDate": parent.updateData.data.deliveryDate
-        });
-
         form.verify({
             requiredSelect: function (value, item) {
                 var othis = $(item);
-                if(!value){
+                if (!value) {
                     othis.next().next().html(othis.attr('lay-msg') || '必填项不能为空'); // 在表单旁边给出提示语
                     return true; // 返回 true 阻止 form 组件内部默认的提示方式
                 }
@@ -93,14 +97,12 @@
         });
 
         form.on('submit(user-save)', function (data) {
-            data.field.id = id;
-            data.field.ordersStatus = 1;
             $.ajax({
-                url: '/orders',
+                url: '/purchase',
                 data: JSON.stringify(data.field),
                 dataType: 'json',
                 contentType: 'application/json',
-                type: 'put',
+                type: 'post',
                 success: function (result) {
                     if (result.success) {
                         parent.layer.close(parent.layer.getFrameIndex(window

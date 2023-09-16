@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>生成送货单</title>
+    <title>进货记录设置</title>
     <link rel="stylesheet" href="../../../component/pear/css/pear.css"/>
 </head>
 <body class="pear-container">
@@ -13,14 +13,7 @@
                 <div class="layui-form-item layui-inline">
                     <label class="layui-form-label">公司名称</label>
                     <div class="layui-input-inline">
-                        <input type="text" name="companyName" placeholder="" class="layui-input">
-                    </div>
-                </div>
-                <div class="layui-form-item layui-inline">
-                    <label class="layui-form-label">送货日期</label>
-                    <div class="layui-input-inline">
-                        <input id="date-piker-type-month" type="text" name="deliveryDateMonth" placeholder=""
-                               class="layui-input">
+                        <input type="text" name="productCompanyName" placeholder="" class="layui-input">
                     </div>
                 </div>
                 <div class="layui-form-item layui-inline">
@@ -55,12 +48,6 @@
 </script>
 
 <script type="text/html" id="user-bar">
-    <button class="pear-btn pear-btn-primary pear-btn-sm" lay-event="billing">
-        <i class="layui-icon layui-icon-list"></i>
-    </button>
-    <button class="pear-btn pear-btn-primary pear-btn-sm" lay-event="addProject">
-        <i class="layui-icon layui-icon-add-1"></i>
-    </button>
     <button class="pear-btn pear-btn-primary pear-btn-sm" lay-event="edit"><i class="layui-icon layui-icon-edit"></i>
     </button>
     <button class="pear-btn pear-btn-danger pear-btn-sm" lay-event="remove"><i class="layui-icon layui-icon-delete"></i>
@@ -76,13 +63,6 @@
         let form = layui.form;
         let $ = layui.jquery;
         let common = layui.common;
-        var layDate = layui.laydate;
-
-        // 年月选择器
-        layDate.render({
-            elem: '#date-piker-type-month',
-            type: 'month'
-        });
 
         let MODULE_PATH = "operate/";
 
@@ -91,18 +71,18 @@
                 type: 'checkbox'
             },
                 {
-                    title: '公司名称',
-                    field: 'companyName',
+                    title: '进货公司',
+                    field: 'productCompanyName',
                     align: 'center'
                 },
                 {
-                    title: '送货日期',
-                    field: 'deliveryDate',
+                    title: '进货日期',
+                    field: 'purchaseDate',
                     align: 'center'
                 },
                 {
-                    title: '金额',
-                    field: 'totalAmount',
+                    title: '进货金额',
+                    field: 'purchaseAmount',
                     align: 'center'
                 },
                 {
@@ -115,7 +95,7 @@
 
         table.render({
             elem: '#page-table',
-            url: '/orders',
+            url: '/purchase',
             page: true,
             cols: cols,
             skin: 'line',
@@ -133,10 +113,6 @@
                 window.remove(obj);
             } else if (obj.event === 'edit') {
                 window.edit(obj);
-            } else if (obj.event === 'billing') {
-                window.billing(obj);
-            } else if (obj.event === 'addProject') {
-                window.addProject(obj);
             }
         });
 
@@ -166,7 +142,7 @@
                 type: 2,
                 title: '新增',
                 shade: 0.1,
-                area: [common.isModile() ? '100%' : '800px', common.isModile() ? '100%' : '600px'],
+                area: [common.isModile() ? '100%' : '500px', common.isModile() ? '100%' : '400px'],
                 content: MODULE_PATH + 'add.html'
             });
         }
@@ -182,35 +158,15 @@
             });
         }
 
-        window.billing = function (obj) {
-            window.open("/orders/exportOrders?id=" + obj.data.id)
-        }
-
-        window.addProject = function (obj) {
-            updateData = obj;
-            layer.open({
-                type: 2,
-                title: '修改',
-                shade: 0.1,
-                area: ['100%', '100%'],
-                content: MODULE_PATH + 'childOrder.html',
-                cancel: function (index, layero, that) {
-                    layer.close(index);
-                    table.reload("page-table");
-                    return false; // 阻止默认关闭行为
-                }
-            });
-        }
-
         window.remove = function (obj) {
-            layer.confirm('确定要删除该送货单', {
+            layer.confirm('确定要删除该进货记录', {
                 icon: 3,
                 title: '提示'
             }, function (index) {
                 layer.close(index);
                 let loading = layer.load();
                 $.ajax({
-                    url: "/orders/" + obj.data['id'],
+                    url: "/purchase/" + obj.data['id'],
                     dataType: 'json',
                     type: 'delete',
                     success: function (result) {
@@ -245,14 +201,14 @@
             }
             console.log(checkIds)
 
-            layer.confirm('确定要删除这些送货单', {
+            layer.confirm('确定要删除这些进货记录', {
                 icon: 3,
                 title: '提示'
             }, function (index) {
                 layer.close(index);
                 let loading = layer.load();
                 $.ajax({
-                    url: "/orders/" + checkIds,
+                    url: "/purchase/" + checkIds,
                     dataType: 'json',
                     type: 'delete',
                     success: function (result) {

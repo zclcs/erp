@@ -12,6 +12,7 @@ import com.mybatisflex.core.query.If;
 import com.mybatisflex.core.query.QueryWrapper;
 import com.mybatisflex.spring.service.impl.ServiceImpl;
 import com.zclcs.erp.api.bean.ao.OrdersAo;
+import com.zclcs.erp.api.bean.entity.Company;
 import com.zclcs.erp.api.bean.entity.Orders;
 import com.zclcs.erp.api.bean.entity.SystemConfig;
 import com.zclcs.erp.api.bean.vo.ChildOrderVo;
@@ -20,9 +21,7 @@ import com.zclcs.erp.core.base.BasePage;
 import com.zclcs.erp.core.base.BasePageAo;
 import com.zclcs.erp.exception.MyException;
 import com.zclcs.erp.mapper.OrdersMapper;
-import com.zclcs.erp.service.ChildOrderService;
-import com.zclcs.erp.service.OrdersService;
-import com.zclcs.erp.service.SystemConfigService;
+import com.zclcs.erp.service.*;
 import com.zclcs.erp.utils.GenDocUtil;
 import com.zclcs.erp.utils.WebUtil;
 import lombok.RequiredArgsConstructor;
@@ -37,7 +36,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static com.mybatisflex.core.query.QueryMethods.groupConcat;
 import static com.mybatisflex.core.query.QueryMethods.sum;
+import static com.zclcs.erp.api.bean.entity.table.ChildOrderBillTableDef.CHILD_ORDER_BILL;
 import static com.zclcs.erp.api.bean.entity.table.ChildOrderTableDef.CHILD_ORDER;
 import static com.zclcs.erp.api.bean.entity.table.OrdersTableDef.ORDERS;
 
@@ -54,6 +55,8 @@ public class OrdersServiceImpl extends ServiceImpl<OrdersMapper, Orders> impleme
 
     private final SystemConfigService systemConfigService;
     private final ChildOrderService childOrderService;
+    private final CompanyService companyService;
+    private final ChildOrderBillService childOrderBillService;
 
     @Override
     public BasePage<OrdersVo> findOrdersPage(BasePageAo basePageAo, OrdersVo ordersVo) {
@@ -88,9 +91,11 @@ public class OrdersServiceImpl extends ServiceImpl<OrdersMapper, Orders> impleme
                         ORDERS.COMPANY_NAME,
                         ORDERS.DELIVERY_DATE,
                         ORDERS.ORDERS_STATUS,
-                        sum(CHILD_ORDER.AMOUNT).as("totalAmount")
+                        sum(CHILD_ORDER.AMOUNT).as("totalAmount"),
+                        groupConcat(CHILD_ORDER.ID).as("totalChildOrderId")
                 ).leftJoin(CHILD_ORDER).on(ORDERS.ID.eq(CHILD_ORDER.ORDERS_ID))
                 .where(ORDERS.COMPANY_NAME.like(ordersVo.getCompanyName(), If::hasText))
+                .and(ORDERS.COMPANY_ID.eq(ordersVo.getCompanyId()))
                 .and(ORDERS.ORDERS_STATUS.eq(ordersVo.getOrdersStatus(), If::notNull))
                 .and(ORDERS.ID.eq(ordersVo.getId()))
                 .orderBy(ORDERS.ID.desc())
@@ -105,7 +110,7 @@ public class OrdersServiceImpl extends ServiceImpl<OrdersMapper, Orders> impleme
         String deliveryDateMonth = ordersVo.getDeliveryDateMonth();
         if (StrUtil.isNotBlank(deliveryDateMonth)) {
             DateTime dataMonth = DateUtil.parse(deliveryDateMonth, DatePattern.NORM_MONTH_FORMAT);
-            queryWrapper.and(ORDERS.DELIVERY_DATE.between(DateUtil.beginOfMonth(dataMonth), DateUtil.endOfMonth(dataMonth)));
+            queryWrapper.and(ORDERS.DELIVERY_DATE.between(DateUtil.beginOfMonth(dataMonth).toString(DatePattern.NORM_DATE_PATTERN), DateUtil.endOfMonth(dataMonth).toString(DatePattern.NORM_DATE_PATTERN)));
         }
         return queryWrapper;
     }
@@ -115,6 +120,7 @@ public class OrdersServiceImpl extends ServiceImpl<OrdersMapper, Orders> impleme
     public Orders createOrders(OrdersAo ordersAo) {
         Orders orders = new Orders();
         BeanUtil.copyProperties(ordersAo, orders);
+        setOrders(orders);
         this.save(orders);
         return orders;
     }
@@ -124,6 +130,7 @@ public class OrdersServiceImpl extends ServiceImpl<OrdersMapper, Orders> impleme
     public Orders updateOrders(OrdersAo ordersAo) {
         Orders orders = new Orders();
         BeanUtil.copyProperties(ordersAo, orders);
+        setOrders(orders);
         this.updateById(orders);
         return orders;
     }
@@ -176,12 +183,17 @@ public class OrdersServiceImpl extends ServiceImpl<OrdersMapper, Orders> impleme
     @Transactional(rollbackFor = Exception.class)
     public void deleteOrders(List<Long> ids) {
         this.removeByIds(ids);
+        List<Long> childOrderIds = childOrderService.listAs(new QueryWrapper().select(CHILD_ORDER.ID).where(CHILD_ORDER.ORDERS_ID.in(ids)), Long.class);
+        childOrderService.remove(new QueryWrapper().where(CHILD_ORDER.ORDERS_ID.in(ids)));
+        if (CollectionUtil.isNotEmpty(childOrderIds)) {
+            childOrderBillService.remove(new QueryWrapper().where(CHILD_ORDER_BILL.CHILD_ORDER_ID.in(childOrderIds)));
+        }
     }
 
     @Override
     public void exportOrders(Long id) {
         OrdersVo orders = findOrders(OrdersVo.builder().id(id).build());
-        SystemConfig one = systemConfigService.queryChain().limit(1).one();
+        SystemConfig one = systemConfigService.getOne(new QueryWrapper().limit(1));
         Map<String, Object> dataMap = new HashMap<>(10);
         dataMap.put("salesman", one.getSalesman());
         dataMap.put("phone", one.getPhone());
@@ -212,6 +224,11 @@ public class OrdersServiceImpl extends ServiceImpl<OrdersMapper, Orders> impleme
             log.error(e.getMessage(), e);
             throw new MyException("文件生成异常");
         }
+    }
+
+    private void setOrders(Orders orders) {
+        Company byId = companyService.getById(orders.getCompanyId());
+        orders.setCompanyName(byId.getName());
     }
 
 }

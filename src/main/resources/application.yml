@@ -1,33 +1,23 @@
+server:
+  port: 9090
 spring:
+  profiles:
+    active: prod
+  sql:
+    init:
+      schema-locations: classpath:sql/schema.sql
+      mode: always
+      encoding: UTF-8
   datasource:
     driver-class-name: org.h2.Driver
     url: jdbc:h2:file:./db/dbfile
     username: root
     password: 123456
-  h2:
-    console:
-      enabled: true
-      path: /h2-console
   mvc:
     static-path-pattern: /static/**
   web:
     resources:
       static-locations: classpath:/static
-  data:
-    rest:
-      page-param-name: page
-      limit-param-name: limit
-
-logging:
-  level:
-    com.zclcs.erp.configuration.MyBatisFlexConfiguration: debug
-    com.zaxxer: info
-    _org.springframework: info
-    org.springframework: info
-    org.hibernate: info
-    org.mybatis: info
-    org.apache.ibatis: info
-    org.jboss: info
 
 mybatis-flex:
   configuration:
@@ -37,3 +27,6 @@ mybatis-flex:
   mapper-locations:
     - "classpath*:/mapper/*.xml"
   type-aliases-package: com.zclcs.erp.api.bean.entity
+
+open-browser:
+  open-url: http://localhost:${server.port}/static/index.html

@@ -18,8 +18,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
@@ -45,7 +48,15 @@ public class OrdersController {
     @GetMapping
     public BaseRsp<OrdersVo> findOrdersPage(@Validated BasePageAo basePageAo, @Validated OrdersVo ordersVo) {
         BasePage<OrdersVo> page = this.ordersService.findOrdersPage(basePageAo, ordersVo);
-        return RspUtil.page(page);
+        Map<String, Object> totalRow = new HashMap<>(1);
+        BigDecimal totalAmount = new BigDecimal("0");
+        for (OrdersVo vo : page.getList()) {
+            if (vo.getTotalAmount() != null) {
+                totalAmount = totalAmount.add(vo.getTotalAmount());
+            }
+        }
+        totalRow.put("totalAmount", totalAmount);
+        return RspUtil.page(page, totalRow);
     }
 
     /**
@@ -153,6 +164,11 @@ public class OrdersController {
         return RspUtil.data(this.ordersService.createOrUpdateOrdersBatch(ordersAos));
     }
 
+    /**
+     * 导出送货单
+     *
+     * @param id id
+     */
     @GetMapping("/exportOrders")
     public void exportOrders(@NotNull(message = "{required}") @RequestParam Long id) {
         ordersService.exportOrders(id);

@@ -1,7 +1,6 @@
 package com.zclcs.erp.api.bean.ao;
 
 import com.zclcs.erp.core.strategy.ValidGroups;
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.*;
@@ -39,6 +38,7 @@ public class ChildOrderAo implements Serializable {
      * 父订单编号
      * 默认值：
      */
+    @NotNull(message = "{required}")
     private Long ordersId;
 
     /**
@@ -53,19 +53,20 @@ public class ChildOrderAo implements Serializable {
      * 默认值：
      */
     @Size(max = 255, message = "{noMoreThan}")
-    @NotBlank(message = "{required}")
     private String productName;
 
     /**
      * 规格型号/桶
      * 默认值：
      */
+    @NotNull(message = "{required}")
     private Integer specification;
 
     /**
      * 桶数
      * 默认值：
      */
+    @NotNull(message = "{required}")
     private Integer number;
 
     /**
@@ -78,6 +79,7 @@ public class ChildOrderAo implements Serializable {
      * 单价
      * 默认值：
      */
+    @NotNull(message = "{required}")
     private BigDecimal price;
 
     /**

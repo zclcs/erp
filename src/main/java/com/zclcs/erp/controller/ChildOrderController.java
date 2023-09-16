@@ -12,13 +12,17 @@ import com.zclcs.erp.core.strategy.ValidGroups;
 import com.zclcs.erp.service.ChildOrderService;
 import com.zclcs.erp.utils.RspUtil;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
@@ -37,14 +41,13 @@ public class ChildOrderController {
 
     /**
      * 子订单查询（分页）
-     * 权限: childOrder:page
      *
      * @see ChildOrderService#findChildOrderPage(BasePageAo, ChildOrderVo)
      */
     @GetMapping
-    public BaseRsp<BasePage<ChildOrderVo>> findChildOrderPage(@Validated BasePageAo basePageAo, @Validated ChildOrderVo childOrderVo) {
+    public BaseRsp<ChildOrderVo> findChildOrderPage(@Validated BasePageAo basePageAo, @Validated ChildOrderVo childOrderVo) {
         BasePage<ChildOrderVo> page = this.childOrderService.findChildOrderPage(basePageAo, childOrderVo);
-        return RspUtil.data(page);
+        return setTotalRow(page);
     }
 
     /**
@@ -69,6 +72,17 @@ public class ChildOrderController {
     public BaseRsp<ChildOrderVo> findChildOrder(@Validated ChildOrderVo childOrderVo) {
         ChildOrderVo childOrder = this.childOrderService.findChildOrder(childOrderVo);
         return RspUtil.data(childOrder);
+    }
+
+    /**
+     * 对账单子订单查询（分页）
+     *
+     * @see ChildOrderService#findChildOrderList(ChildOrderVo)
+     */
+    @GetMapping("/byBillId")
+    public BaseRsp<ChildOrderVo> findChildOrderListByBillIdPage(@Validated BasePageAo basePageAo, @NotNull(message = "{required}") @RequestParam Long billId) {
+        BasePage<ChildOrderVo> page = this.childOrderService.findChildOrderListByBillIdPage(basePageAo, billId);
+        return setTotalRow(page);
     }
 
     /**
@@ -150,5 +164,27 @@ public class ChildOrderController {
     @PostMapping("/createOrUpdate/batch")
     public BaseRsp<List<ChildOrder>> createOrUpdateChildOrderBatch(@RequestBody @Validated ValidatedList<ChildOrderAo> childOrderAos) {
         return RspUtil.data(this.childOrderService.createOrUpdateChildOrderBatch(childOrderAos));
+    }
+
+    private BaseRsp<ChildOrderVo> setTotalRow(BasePage<ChildOrderVo> page) {
+        Map<String, Object> totalRow = new HashMap<>(1);
+        int number = 0;
+        int weight = 0;
+        BigDecimal amount = new BigDecimal("0");
+        for (ChildOrderVo vo : page.getList()) {
+            if (vo.getNumber() != null) {
+                number = number + vo.getNumber();
+            }
+            if (vo.getWeight() != null) {
+                weight = weight + vo.getWeight();
+            }
+            if (vo.getAmount() != null) {
+                amount = amount.add(vo.getAmount());
+            }
+        }
+        totalRow.put("number", number);
+        totalRow.put("weight", weight);
+        totalRow.put("amount", amount);
+        return RspUtil.page(page, totalRow);
     }
 }

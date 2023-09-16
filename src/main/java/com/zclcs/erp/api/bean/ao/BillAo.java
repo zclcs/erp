@@ -1,6 +1,7 @@
 package com.zclcs.erp.api.bean.ao;
 
 import com.zclcs.erp.core.strategy.ValidGroups;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.*;
@@ -66,6 +67,12 @@ public class BillAo implements Serializable {
      * 默认值：
      */
     private BigDecimal totalAmount;
+
+    /**
+     * 对账日期-月份
+     */
+    @NotBlank(message = "{required}", groups = {ValidGroups.Crud.Create.class})
+    private String deliveryDateMonth;
 
 
 }

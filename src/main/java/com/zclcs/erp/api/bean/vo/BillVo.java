@@ -64,5 +64,12 @@ public class BillVo implements Serializable {
      */
     private BigDecimal totalAmount;
 
+    /**
+     * 对账日期-月份
+     */
+    private String deliveryDateMonth;
 
+    public BigDecimal getTotalAmount() {
+        return this.totalAmount = totalAmount == null ? new BigDecimal("0") : totalAmount;
+    }
 }

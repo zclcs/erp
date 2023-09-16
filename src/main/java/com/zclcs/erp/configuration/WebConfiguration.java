@@ -12,9 +12,11 @@ import com.fasterxml.jackson.datatype.jsr310.deser.LocalTimeDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalTimeSerializer;
+import com.zclcs.erp.configuration.properties.OpenBrowserProperties;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.propertyeditors.StringTrimmerEditor;
 import org.springframework.boot.autoconfigure.jackson.Jackson2ObjectMapperBuilderCustomizer;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.format.FormatterRegistry;
@@ -36,6 +38,7 @@ import java.time.format.DateTimeFormatter;
  */
 @Configuration
 @RequiredArgsConstructor
+@EnableConfigurationProperties(OpenBrowserProperties.class)
 public class WebConfiguration implements WebMvcConfigurer {
 
     public static final String NORM_DATETIME_PATTERN = "yyyy-MM-dd HH:mm:ss";

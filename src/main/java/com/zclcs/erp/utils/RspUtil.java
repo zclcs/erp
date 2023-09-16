@@ -5,6 +5,8 @@ import com.zclcs.erp.core.base.BaseRsp;
 import lombok.experimental.UtilityClass;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.util.Map;
+
 /**
  * @author zclcs
  */
@@ -26,6 +28,10 @@ public class RspUtil {
 
     public <T> BaseRsp<T> page(BasePage<T> page) {
         return new BaseRsp<>(page);
+    }
+
+    public <T> BaseRsp<T> page(BasePage<T> page, Map<String, Object> totalRow) {
+        return new BaseRsp<>(page, totalRow);
     }
 
     public <T> BaseRsp<T> data(T data) {

@@ -56,49 +56,7 @@ public interface BillService extends IService<Bill> {
      * @param billAo {@link BillAo}
      * @return {@link Bill}
      */
-    Bill createBill(BillAo billAo);
-
-    /**
-     * 修改
-     *
-     * @param billAo {@link BillAo}
-     * @return {@link Bill}
-     */
-    Bill updateBill(BillAo billAo);
-
-    /**
-     * 新增或修改
-     *
-     * @param billAo {@link BillAo}
-     * @return {@link Bill}
-     */
-    Bill createOrUpdateBill(BillAo billAo);
-
-    /**
-     * 批量新增
-     *
-     * @param billAos {@link BillAo}
-     * @return {@link Bill}
-     */
-    List<Bill> createBillBatch(List<BillAo> billAos);
-
-    /**
-     * 批量修改
-     *
-     * @param billAos {@link BillAo}
-     * @return {@link Bill}
-     */
-    List<Bill> updateBillBatch(List<BillAo> billAos);
-
-    /**
-     * 批量新增或修改
-     * id为空则新增，不为空则修改
-     * 可以自行重写
-     *
-     * @param billAos {@link BillAo}
-     * @return {@link Bill}
-     */
-    List<Bill> createOrUpdateBillBatch(List<BillAo> billAos);
+    void createBill(BillAo billAo);
 
     /**
      * 删除
@@ -106,5 +64,12 @@ public interface BillService extends IService<Bill> {
      * @param ids 表id集合
      */
     void deleteBill(List<Long> ids);
+
+    /**
+     * 生成对账单
+     *
+     * @param id id
+     */
+    void exportBill(Long id);
 
 }

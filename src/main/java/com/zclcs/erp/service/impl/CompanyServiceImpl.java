@@ -144,7 +144,7 @@ public class CompanyServiceImpl extends ServiceImpl<CompanyMapper, Company> impl
 
     @Override
     public void validateCompanyName(String name, Long id) {
-        Company one = this.queryChain().where(COMPANY.NAME.eq(name)).one();
+        Company one = this.getOne(new QueryWrapper().where(COMPANY.NAME.eq(name)));
         if (one != null && !one.getId().equals(id)) {
             throw new FieldException("公司名称重复");
         }

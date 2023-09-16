@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>生成送货单</title>
+    <title>生成对账单</title>
     <link rel="stylesheet" href="../../../component/pear/css/pear.css"/>
 </head>
 <body class="pear-container">
@@ -17,7 +17,7 @@
                     </div>
                 </div>
                 <div class="layui-form-item layui-inline">
-                    <label class="layui-form-label">送货日期</label>
+                    <label class="layui-form-label">生成日期</label>
                     <div class="layui-input-inline">
                         <input id="date-piker-type-month" type="text" name="deliveryDateMonth" placeholder=""
                                class="layui-input">
@@ -46,7 +46,7 @@
 <script type="text/html" id="user-toolbar">
     <button class="pear-btn pear-btn-primary pear-btn-md" lay-event="add">
         <i class="layui-icon layui-icon-add-1"></i>
-        新增
+        生成对账单
     </button>
     <button class="pear-btn pear-btn-danger pear-btn-md" lay-event="batchRemove">
         <i class="layui-icon layui-icon-delete"></i>
@@ -58,10 +58,8 @@
     <button class="pear-btn pear-btn-primary pear-btn-sm" lay-event="billing">
         <i class="layui-icon layui-icon-list"></i>
     </button>
-    <button class="pear-btn pear-btn-primary pear-btn-sm" lay-event="addProject">
-        <i class="layui-icon layui-icon-add-1"></i>
-    </button>
-    <button class="pear-btn pear-btn-primary pear-btn-sm" lay-event="edit"><i class="layui-icon layui-icon-edit"></i>
+    <button class="pear-btn pear-btn-primary pear-btn-sm" lay-event="viewProject">
+        <i class="layui-icon layui-icon-eye"></i>
     </button>
     <button class="pear-btn pear-btn-danger pear-btn-sm" lay-event="remove"><i class="layui-icon layui-icon-delete"></i>
     </button>
@@ -96,7 +94,7 @@
                     align: 'center'
                 },
                 {
-                    title: '送货日期',
+                    title: '生成日期',
                     field: 'deliveryDate',
                     align: 'center'
                 },
@@ -115,7 +113,7 @@
 
         table.render({
             elem: '#page-table',
-            url: '/orders',
+            url: '/bill',
             page: true,
             cols: cols,
             skin: 'line',
@@ -131,12 +129,10 @@
         table.on('tool(page-table)', function (obj) {
             if (obj.event === 'remove') {
                 window.remove(obj);
-            } else if (obj.event === 'edit') {
-                window.edit(obj);
             } else if (obj.event === 'billing') {
                 window.billing(obj);
-            } else if (obj.event === 'addProject') {
-                window.addProject(obj);
+            } else if (obj.event === 'viewProject') {
+                window.viewProject(obj);
             }
         });
 
@@ -166,7 +162,7 @@
                 type: 2,
                 title: '新增',
                 shade: 0.1,
-                area: [common.isModile() ? '100%' : '800px', common.isModile() ? '100%' : '600px'],
+                area: [common.isModile() ? '100%' : '500px', common.isModile() ? '100%' : '500px'],
                 content: MODULE_PATH + 'add.html'
             });
         }
@@ -183,10 +179,10 @@
         }
 
         window.billing = function (obj) {
-            window.open("/orders/exportOrders?id=" + obj.data.id)
+            window.open("/bill/exportBill?id=" + obj.data.id)
         }
 
-        window.addProject = function (obj) {
+        window.viewProject = function (obj) {
             updateData = obj;
             layer.open({
                 type: 2,
@@ -203,14 +199,14 @@
         }
 
         window.remove = function (obj) {
-            layer.confirm('确定要删除该送货单', {
+            layer.confirm('确定要删除该对账单', {
                 icon: 3,
                 title: '提示'
             }, function (index) {
                 layer.close(index);
                 let loading = layer.load();
                 $.ajax({
-                    url: "/orders/" + obj.data['id'],
+                    url: "/bill/" + obj.data['id'],
                     dataType: 'json',
                     type: 'delete',
                     success: function (result) {
@@ -245,14 +241,14 @@
             }
             console.log(checkIds)
 
-            layer.confirm('确定要删除这些送货单', {
+            layer.confirm('确定要删除这些对账单', {
                 icon: 3,
                 title: '提示'
             }, function (index) {
                 layer.close(index);
                 let loading = layer.load();
                 $.ajax({
-                    url: "/orders/" + checkIds,
+                    url: "/bill/" + checkIds,
                     dataType: 'json',
                     type: 'delete',
                     success: function (result) {

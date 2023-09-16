@@ -1,15 +1,22 @@
 package com.zclcs.erp.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.date.DatePattern;
+import cn.hutool.core.date.DateTime;
+import cn.hutool.core.date.DateUtil;
+import cn.hutool.core.util.StrUtil;
 import com.mybatisflex.core.paginate.Page;
+import com.mybatisflex.core.query.If;
 import com.mybatisflex.core.query.QueryWrapper;
 import com.mybatisflex.spring.service.impl.ServiceImpl;
 import com.zclcs.erp.api.bean.ao.PurchaseAo;
+import com.zclcs.erp.api.bean.entity.ProductCompany;
 import com.zclcs.erp.api.bean.entity.Purchase;
 import com.zclcs.erp.api.bean.vo.PurchaseVo;
 import com.zclcs.erp.core.base.BasePage;
 import com.zclcs.erp.core.base.BasePageAo;
 import com.zclcs.erp.mapper.PurchaseMapper;
+import com.zclcs.erp.service.ProductCompanyService;
 import com.zclcs.erp.service.PurchaseService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -31,6 +38,8 @@ import static com.zclcs.erp.api.bean.entity.table.PurchaseTableDef.PURCHASE;
 @Service
 @RequiredArgsConstructor
 public class PurchaseServiceImpl extends ServiceImpl<PurchaseMapper, Purchase> implements PurchaseService {
+
+    private final ProductCompanyService productCompanyService;
 
     @Override
     public BasePage<PurchaseVo> findPurchasePage(BasePageAo basePageAo, PurchaseVo purchaseVo) {
@@ -60,13 +69,19 @@ public class PurchaseServiceImpl extends ServiceImpl<PurchaseMapper, Purchase> i
     private QueryWrapper getQueryWrapper(PurchaseVo purchaseVo) {
         QueryWrapper queryWrapper = new QueryWrapper();
         queryWrapper.select(
-                PURCHASE.ID,
-                PURCHASE.PRODUCT_COMPANY_ID,
-                PURCHASE.PRODUCT_COMPANY_NAME,
-                PURCHASE.PURCHASE_DATE,
-                PURCHASE.PURCHASE_AMOUNT
-        );
-        // TODO 设置公共查询条件
+                        PURCHASE.ID,
+                        PURCHASE.PRODUCT_COMPANY_ID,
+                        PURCHASE.PRODUCT_COMPANY_NAME,
+                        PURCHASE.PURCHASE_DATE,
+                        PURCHASE.PURCHASE_AMOUNT
+                )
+                .where(PURCHASE.PRODUCT_COMPANY_NAME.like(purchaseVo.getProductCompanyName(), If::hasText))
+        ;
+        String purchaseDateMonth = purchaseVo.getPurchaseDateMonth();
+        if (StrUtil.isNotBlank(purchaseDateMonth)) {
+            DateTime dataMonth = DateUtil.parse(purchaseDateMonth, DatePattern.NORM_MONTH_FORMAT);
+            queryWrapper.and(PURCHASE.PURCHASE_DATE.between(DateUtil.beginOfMonth(dataMonth).toString(DatePattern.NORM_DATE_PATTERN), DateUtil.endOfMonth(dataMonth).toString(DatePattern.NORM_DATE_PATTERN)));
+        }
         return queryWrapper;
     }
 
@@ -75,6 +90,7 @@ public class PurchaseServiceImpl extends ServiceImpl<PurchaseMapper, Purchase> i
     public Purchase createPurchase(PurchaseAo purchaseAo) {
         Purchase purchase = new Purchase();
         BeanUtil.copyProperties(purchaseAo, purchase);
+        setPurchase(purchase);
         this.save(purchase);
         return purchase;
     }
@@ -84,6 +100,7 @@ public class PurchaseServiceImpl extends ServiceImpl<PurchaseMapper, Purchase> i
     public Purchase updatePurchase(PurchaseAo purchaseAo) {
         Purchase purchase = new Purchase();
         BeanUtil.copyProperties(purchaseAo, purchase);
+        setPurchase(purchase);
         this.updateById(purchase);
         return purchase;
     }
@@ -136,6 +153,11 @@ public class PurchaseServiceImpl extends ServiceImpl<PurchaseMapper, Purchase> i
     @Transactional(rollbackFor = Exception.class)
     public void deletePurchase(List<Long> ids) {
         this.removeByIds(ids);
+    }
+
+    private void setPurchase(Purchase purchase) {
+        ProductCompany byId = productCompanyService.getById(purchase.getProductCompanyId());
+        purchase.setProductCompanyName(byId.getName());
     }
 
 }

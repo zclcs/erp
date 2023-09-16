@@ -10,6 +10,7 @@ import lombok.experimental.SuperBuilder;
 import java.io.Serial;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 
 /**
  * 子订单 Vo
@@ -103,6 +104,22 @@ public class ChildOrderVo implements Serializable {
      * kg
      */
     private String weightString;
+
+    /**
+     * 对账单id
+     */
+    private Long billId;
+
+    /**
+     * 送货日期
+     * 默认值：
+     */
+    private LocalDate deliveryDateOriginal;
+
+    /**
+     * 送货日期
+     */
+    private String deliveryDate;
 
     public String getSpecificationString() {
         return this.specification == null ? null : this.specification + "kg/桶";

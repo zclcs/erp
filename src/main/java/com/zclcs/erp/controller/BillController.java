@@ -1,24 +1,26 @@
 package com.zclcs.erp.controller;
 
 import com.zclcs.erp.api.bean.ao.BillAo;
-import com.zclcs.erp.api.bean.entity.Bill;
 import com.zclcs.erp.api.bean.vo.BillVo;
 import com.zclcs.erp.core.base.BasePage;
 import com.zclcs.erp.core.base.BasePageAo;
 import com.zclcs.erp.core.base.BaseRsp;
-import com.zclcs.erp.core.bean.ValidatedList;
 import com.zclcs.erp.core.constant.Strings;
 import com.zclcs.erp.core.strategy.ValidGroups;
 import com.zclcs.erp.service.BillService;
 import com.zclcs.erp.utils.RspUtil;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
@@ -44,7 +46,15 @@ public class BillController {
     @GetMapping
     public BaseRsp<BillVo> findBillPage(@Validated BasePageAo basePageAo, @Validated BillVo billVo) {
         BasePage<BillVo> page = this.billService.findBillPage(basePageAo, billVo);
-        return RspUtil.page(page);
+        Map<String, Object> totalRow = new HashMap<>(1);
+        BigDecimal totalAmount = new BigDecimal("0");
+        for (BillVo vo : page.getList()) {
+            if (vo.getTotalAmount() != null) {
+                totalAmount = totalAmount.add(vo.getTotalAmount());
+            }
+        }
+        totalRow.put("totalAmount", totalAmount);
+        return RspUtil.page(page, totalRow);
     }
 
     /**
@@ -78,30 +88,9 @@ public class BillController {
      * @see BillService#createBill(BillAo)
      */
     @PostMapping
-    public BaseRsp<Bill> addBill(@Validated @RequestBody BillAo billAo) {
-        return RspUtil.data(this.billService.createBill(billAo));
-    }
-
-    /**
-     * 修改对账单
-     * 权限: bill:update
-     *
-     * @see BillService#updateBill(BillAo)
-     */
-    @PutMapping
-    public BaseRsp<Bill> updateBill(@Validated({ValidGroups.Crud.Update.class}) @RequestBody BillAo billAo) {
-        return RspUtil.data(this.billService.updateBill(billAo));
-    }
-
-    /**
-     * 新增或修改对账单
-     * 权限: bill:createOrUpdate
-     *
-     * @see BillService#createOrUpdateBill(BillAo)
-     */
-    @PostMapping("/createOrUpdate")
-    public BaseRsp<Bill> createOrUpdateBill(@RequestBody @Validated BillAo billAo) {
-        return RspUtil.data(this.billService.createOrUpdateBill(billAo));
+    public BaseRsp<String> addBill(@Validated({ValidGroups.Crud.Create.class}) @RequestBody BillAo billAo) {
+        this.billService.createBill(billAo);
+        return RspUtil.message();
     }
 
     /**
@@ -119,36 +108,13 @@ public class BillController {
     }
 
     /**
-     * 批量新增对账单
-     * 权限: bill:add:batch
+     * 导出对账单
      *
-     * @see BillService#createBillBatch(List)
+     * @param id id
      */
-    @PostMapping("/batch")
-    public BaseRsp<List<Bill>> createBillBatch(@RequestBody @Validated ValidatedList<BillAo> billAos) {
-        return RspUtil.data(this.billService.createBillBatch(billAos));
+    @GetMapping("/exportBill")
+    public void exportBill(@NotNull(message = "{required}") @RequestParam Long id) {
+        billService.exportBill(id);
     }
 
-    /**
-     * 批量修改对账单
-     * 权限: bill:update:batch
-     *
-     * @see BillService#createOrUpdateBillBatch(List)
-     */
-    @PutMapping("/batch")
-    public BaseRsp<List<Bill>> updateBillBatch(@RequestBody @Validated({ValidGroups.Crud.Update.class}) ValidatedList<BillAo> billAos) {
-        return RspUtil.data(this.billService.updateBillBatch(billAos));
-    }
-
-    /**
-     * 批量新增或修改对账单
-     * id为空则新增，不为空则修改
-     * 权限: bill:createOrUpdate:batch
-     *
-     * @see BillService#createOrUpdateBillBatch(List)
-     */
-    @PostMapping("/createOrUpdate/batch")
-    public BaseRsp<List<Bill>> createOrUpdateBillBatch(@RequestBody @Validated ValidatedList<BillAo> billAos) {
-        return RspUtil.data(this.billService.createOrUpdateBillBatch(billAos));
-    }
 }

@@ -144,7 +144,7 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
 
     @Override
     public void validateName(String name, Long id) {
-        Product one = this.queryChain().where(PRODUCT.NAME.eq(name)).one();
+        Product one = this.getOne(new QueryWrapper().where(PRODUCT.NAME.eq(name)));
         if (one != null && !one.getId().equals(id)) {
             throw new FieldException("产品名称重复");
         }

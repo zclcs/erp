@@ -27,6 +27,8 @@ public class ErpRuntimeHintsRegistrar implements RuntimeHintsRegistrar {
                 .registerPattern("banner.txt")
                 .registerPattern("ValidationMessages.properties")
                 .registerPattern("mapper/*")
+                .registerPattern("templates/*")
+                .registerPattern("sql/*")
         ;
     }
 

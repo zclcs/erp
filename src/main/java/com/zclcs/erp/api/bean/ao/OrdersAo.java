@@ -38,6 +38,7 @@ public class OrdersAo implements Serializable {
      * 公司编号
      * 默认值：
      */
+    @NotNull(message = "{required}")
     private Long companyId;
 
     /**
@@ -51,6 +52,7 @@ public class OrdersAo implements Serializable {
      * 送货日期
      * 默认值：
      */
+    @NotNull(message = "{required}")
     private LocalDate deliveryDate;
 
     /**
