@@ -12,288 +12,518 @@
 <body class="pear-container">
 <div>
     <div class="layui-row layui-col-space10">
-        <div>
-            <div class="layui-card-header">进销存柱状图</div>
-            <div class="layui-card-body">
-                <div class="layui-tab custom-tab layui-tab-brief" lay-filter="docDemoTabBrief">
-                    <div id="profit" style="background-color:#ffffff;min-height:400px;padding: 10px"></div>
+        <form class="layui-form" action="">
+            <div class="layui-inline">
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-form-item layui-inline">
+                    <label class="layui-form-label">日期范围</label>
+                    <div class="layui-inline" id="ID-laydate-range">
+                        <div class="layui-input-inline">
+                            <input name="startDate" type="text" lay-verify="required" autocomplete="off"
+                                   id="ID-laydate-start-date"
+                                   class="layui-input"
+                                   placeholder="开始日期">
+                            <span class="layui-font-red"></span>
+                        </div>
+                        <div class="layui-form-mid">-</div>
+                        <div class="layui-input-inline">
+                            <input name="endDate" type="text" lay-verify="required" autocomplete="off"
+                                   id="ID-laydate-end-date"
+                                   class="layui-input"
+                                   placeholder="结束日期">
+                            <span class="layui-font-red"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-form-item layui-inline">
+                    <button class="pear-btn pear-btn-md pear-btn-primary" lay-submit lay-filter="user-query">
+                        <i class="layui-icon layui-icon-search"></i>
+                        查询
+                    </button>
+                    <button type="reset" class="pear-btn pear-btn-md">
+                        <i class="layui-icon layui-icon-refresh"></i>
+                        重置
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="layui-row layui-col-space10">
+        <div class="layui-col-xs6 layui-col-md3">
+            <div class="layui-card top-panel">
+                <div class="layui-card-header">单价最高产品</div>
+                <div class="layui-card-body">
+                    <div class="layui-row layui-col-space5">
+                        <div class="layui-col-xs8 layui-col-md8 top-panel-number" style="color: #28333E;"
+                             id="maxPriceProduct">
+                            0
+                        </div>
+                        <div class="layui-col-xs4 layui-col-md4 top-panel-tips" id="maxPriceProductName">
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
-        <div>
-            <div class="layui-card-header">利润动态统计</div>
-            <div class="layui-card-body">
-                <div class="layui-tab custom-tab layui-tab-brief" lay-filter="docDemoTabBrief">
-                    <div id="profit-dynamic" style="background-color:#ffffff;min-height:400px;padding: 10px"></div>
+        <div class="layui-col-xs6 layui-col-md3">
+            <div class="layui-card top-panel">
+                <div class="layui-card-header">销量最高产品</div>
+                <div class="layui-card-body">
+                    <div class="layui-row layui-col-space5">
+                        <div class="layui-col-xs8 layui-col-md8 top-panel-number" style="color: #28333E;"
+                             id="maxWeightProduct">
+                            0
+                        </div>
+                        <div class="layui-col-xs4 layui-col-md4 top-panel-tips" id="maxWeightProductName">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="layui-col-xs6 layui-col-md3">
+            <div class="layui-card top-panel">
+                <div class="layui-card-header">销售额最高产品</div>
+                <div class="layui-card-body">
+                    <div class="layui-row layui-col-space5">
+                        <div class="layui-col-xs8 layui-col-md8 top-panel-number" style="color: #28333E;"
+                             id="maxAmountProduct">
+                            0
+                        </div>
+                        <div class="layui-col-xs4 layui-col-md4  top-panel-tips"
+                             id="maxAmountProductName">>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="layui-col-xs6 layui-col-md3">
+            <div class="layui-card top-panel">
+                <div class="layui-card-header">销售额最高公司</div>
+                <div class="layui-card-body">
+                    <div class="layui-row layui-col-space5">
+                        <div class="layui-col-xs8 layui-col-md8 top-panel-number" style="color: #28333E;"
+                             id="maxAmountCompany">
+                            0
+                        </div>
+                        <div class="layui-col-xs4 layui-col-md4 top-panel-tips"
+                             id="maxAmountCompanyName">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="layui-row layui-col-space10">
+        <div class="layui-col-md6">
+            <div class="layui-card">
+                <div class="layui-card-header">产品单价TOP10</div>
+                <div class="layui-card-body">
+                    <div class="layui-tab custom-tab layui-tab-brief" lay-filter="docDemoTabBrief">
+                        <div id="maxPriceProductEcharts"
+                             style="background-color:#ffffff;min-height:400px;padding: 10px"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="layui-col-md6">
+            <div class="layui-card">
+                <div class="layui-card-header">产品销量TOP10</div>
+                <div class="layui-card-body">
+                    <div class="layui-tab custom-tab layui-tab-brief" lay-filter="docDemoTabBrief">
+                        <div id="maxWeightProductEcharts"
+                             style="background-color:#ffffff;min-height:400px;padding: 10px"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="layui-row layui-col-space10">
+        <div class="layui-col-md6">
+            <div class="layui-card">
+                <div class="layui-card-header">产品销售额TOP10</div>
+                <div class="layui-card-body">
+                    <div class="layui-tab custom-tab layui-tab-brief" lay-filter="docDemoTabBrief">
+                        <div id="maxAmountProductEcharts"
+                             style="background-color:#ffffff;min-height:400px;padding: 10px"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="layui-col-md6">
+            <div class="layui-card">
+                <div class="layui-card-header">公司销售额TOP10</div>
+                <div class="layui-card-body">
+                    <div class="layui-tab custom-tab layui-tab-brief" lay-filter="docDemoTabBrief">
+                        <div id="maxAmountCompanyEcharts"
+                             style="background-color:#ffffff;min-height:400px;padding: 10px"></div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
-</div>
 <!--</div>-->
 <script src="../../component/layui/layui.js"></script>
 <script src="../../component/pear/pear.js"></script>
 <script>
+    //获取当前日期函数
+    function getNowFormatDate() {
+        let date = new Date(),
+            year = date.getFullYear(), //获取完整的年份(4位)
+            month = date.getMonth() + 1, //获取当前月份(0-11,0代表1月)
+            strDate = date.getDate() // 获取当前日(1-31)
+        if (month < 10) month = `0${month}` // 如果月份是个位数，在前面补0
+        if (strDate < 10) strDate = `0${strDate}` // 如果日是个位数，在前面补0
+
+        return `${year}-${month}-${strDate}`
+    }
+
+    function getNowFormatBeginOfMonthDate() {
+        let date = new Date(),
+            year = date.getFullYear(), //获取完整的年份(4位)
+            month = date.getMonth() + 1, //获取当前月份(0-11,0代表1月)
+            strDate = 1 // 获取当前日(1-31)
+        if (month < 10) month = `0${month}` // 如果月份是个位数，在前面补0
+        if (strDate < 10) strDate = `0${strDate}` // 如果日是个位数，在前面补0
+
+        return `${year}-${month}-${strDate}`
+    }
+
     layui.use(['layer', 'echarts', 'element', 'count'], function () {
         var $ = layui.jquery,
             layer = layui.layer,
             element = layui.element,
             count = layui.count,
+            util = layui.util,
+            laydate = layui.laydate,
             echarts = layui.echarts;
-        var ROOT_PATH = 'https://echarts.apache.org/examples';
+        let form = layui.form;
 
-        var echartsRecords = echarts.init(document.getElementById('profit'), 'walden');
-
-        var profitDynamic = echarts.init(document.getElementById('profit-dynamic'), null, {
+        var maxPriceProductEcharts = echarts.init(document.getElementById('maxPriceProductEcharts'), null, {
             renderer: 'canvas',
             useDirtyRect: false
         });
 
+        var maxWeightProductEcharts = echarts.init(document.getElementById('maxWeightProductEcharts'), null, {
+            renderer: 'canvas',
+            useDirtyRect: false
+        });
 
-        var optionDynamic;
+        var maxAmountProductEcharts = echarts.init(document.getElementById('maxAmountProductEcharts'), null, {
+            renderer: 'canvas',
+            useDirtyRect: false
+        });
 
+        var maxAmountCompanyEcharts = echarts.init(document.getElementById('maxAmountCompanyEcharts'), null, {
+            renderer: 'canvas',
+            useDirtyRect: false
+        });
 
-        $.get(
-            '/static/admin/data/data.json',
-            function (_rawData) {
-                run(_rawData);
-            }
-        );
+        reloadData(getNowFormatBeginOfMonthDate(), getNowFormatDate());
 
-        function run(_rawData) {
-            const countries = [
-                'Finland',
-                'France',
-                'Germany',
-                'Iceland',
-                'Norway',
-                'Poland',
-                'Russia',
-                'United Kingdom'
-            ];
-            const datasetWithFilters = [];
-            const seriesList = [];
-            echarts.util.each(countries, function (country) {
-                var datasetId = 'dataset_' + country;
-                datasetWithFilters.push({
-                    id: datasetId,
-                    fromDatasetId: 'dataset_raw',
-                    transform: {
-                        type: 'filter',
-                        config: {
-                            and: [
-                                {dimension: 'Year', gte: 1950},
-                                {dimension: 'Country', '=': country}
-                            ]
-                        }
-                    }
-                });
-                seriesList.push({
-                    type: 'line',
-                    datasetId: datasetId,
-                    showSymbol: false,
-                    name: country,
-                    endLabel: {
-                        show: true,
-                        formatter: function (params) {
-                            return params.value[3] + ': ' + params.value[0];
-                        }
-                    },
-                    labelLayout: {
-                        moveOverlap: 'shiftY'
-                    },
-                    emphasis: {
-                        focus: 'series'
-                    },
-                    encode: {
-                        x: 'Year',
-                        y: 'Income',
-                        label: ['Country', 'Income'],
-                        itemName: 'Year',
-                        tooltip: ['Income']
-                    }
-                });
-            });
-            optionDynamic = {
-                animationDuration: 10000,
-                dataset: [
-                    {
-                        id: 'dataset_raw',
-                        source: _rawData
-                    },
-                    ...datasetWithFilters
-                ],
-                title: {
-                    text: '利润动态统计'
-                },
-                tooltip: {
-                    order: 'valueDesc',
-                    trigger: 'axis'
-                },
-                xAxis: {
-                    type: 'category',
-                    nameLocation: 'middle'
-                },
-                yAxis: {
-                    name: '利润'
-                },
-                grid: {
-                    right: 140
-                },
-                series: seriesList
-            };
-            profitDynamic.setOption(optionDynamic);
-        }
+        laydate.render({
+            elem: '#ID-laydate-range',
+            value: [getNowFormatBeginOfMonthDate(), getNowFormatDate()],
+            isInitValue: true,
+            range: ['#ID-laydate-start-date', '#ID-laydate-end-date']
+        });
 
-        if (option && typeof option === 'object') {
-            profitDynamic.setOption(option);
-        }
+        form.on('submit(user-query)', function (data) {
+            reloadData(data.field.startDate, data.field.endDate);
+            return false;
+        });
 
-        var option = {
-            backgroundColor: '#fff',
-            tooltip: {
-                show: false
-            },
-            grid: {
-                top: '10%',
-                bottom: '6%',
-                left: '6%',
-                right: '6%',
-                containLabel: true
-            },
-            xAxis: [{
-                type: 'category',
-                boundaryGap: false,
-                axisLine: {
-                    show: false
-                },
-                axisTick: {
-                    show: false
-                },
-                axisLabel: {
-                    margin: 10,
-                    //textStyle: {
-                    fontSize: 14,
-                    color: 'rgba(#999)'
-                    //}
-                },
-                splitLine: {
-                    show: true,
-                    lineStyle: {
-                        color: '#939ab6',
-                        opacity: .15
-                    }
-                },
-                data: ['10:00', '10:10', '10:10', '10:30', '10:40', '10:50']
-            },],
-            yAxis: [{
-                type: 'value',
-                offset: 15,
-                max: 100,
-                min: 0,
-                axisTick: {
-                    show: false
-                },
-                axisLine: {
-                    show: false
-                },
-                axisLabel: {
-                    margin: 10,
-                    //textStyle: {
-                    fontSize: 14,
-                    color: '#999'
-                    //}
-                },
-                splitLine: {
-                    show: false
+        form.verify({
+            required: function (value, item) {
+                var othis = $(item);
+                if (!value) {
+                    othis.next("span").html(othis.attr('lay-msg') || '必填项不能为空'); // 在表单旁边给出提示语
+                    return true; // 返回 true 阻止 form 组件内部默认的提示方式
                 }
+                othis.next().empty();
+            },
+        });
 
-            }],
-            series: [{
-                name: '2',
-                type: 'line',
-                z: 3,
-                showSymbol: false,
-                smoothMonotone: 'x',
-                lineStyle: {
-                    width: 3,
-                    color: {
-                        type: 'linear',
-                        x: 0,
-                        y: 0,
-                        x2: 0,
-                        y2: 1,
-                        colorStops: [{
-                            offset: 0,
-                            color: 'rgba(59,102,246)' // 0% 处的颜色
-                        }, {
-                            offset: 1,
-                            color: 'rgba(118,237,252)' // 100% 处的颜色
-                        }]
-                    },
-                    shadowBlur: 4,
-                    shadowColor: 'rgba(69,126,247,.2)',
-                    shadowOffsetY: 4
-                },
-                areaStyle: {
-                    //normal: {
-                    color: {
-                        type: 'linear',
-                        x: 0,
-                        y: 0,
-                        x2: 0,
-                        y2: 1,
-                        colorStops: [{
-                            offset: 0,
-                            color: 'rgba(227,233,250,.9)' // 0% 处的颜色
-                        }, {
-                            offset: 1,
-                            color: 'rgba(248,251,252,.3)' // 100% 处的颜色
-                        }]
+        function reloadData(startDate, endDate) {
+            $.ajax({
+                url: '/statistical/maxPriceByProduct?startDate=' + startDate + '&endDate=' + endDate,
+                dataType: 'json', //服务器返回json格式数据
+                type: 'get', //HTTP请求类型
+                async: false,
+                success: function (result) {
+                    count.up("maxPriceProduct", {
+                        time: 4000,
+                        num: result.bean[0].price,
+                        bit: 2,
+                        regulator: 50
+                    })
+                    $('#maxPriceProductName').html(result.bean[0].productName)
+                    let maxPriceProductTitle = [];
+                    let maxPriceProductValue = [];
+                    for (const beanElement of result.bean) {
+                        maxPriceProductTitle.push(beanElement.productName)
+                        maxPriceProductValue.push(beanElement.price)
                     }
-                    //}
-                },
-                smooth: true,
-                data: [20, 56, 17, 40, 68, 42]
-            }, {
-                name: '1',
-                type: 'line',
-                showSymbol: false,
-                smoothMonotone: 'x',
+                    var option = {
+                        tooltip: {
+                            trigger: 'axis',
+                            axisPointer: {
+                                type: 'shadow'
+                            }
+                        },
+                        grid: {
+                            left: '3%',
+                            right: '4%',
+                            bottom: '3%',
+                            containLabel: true
+                        },
+                        xAxis: [
+                            {
+                                type: 'category',
+                                data: maxPriceProductTitle,
+                                axisTick: {
+                                    alignWithLabel: true
+                                }
+                            }
+                        ],
+                        yAxis: [
+                            {
+                                type: 'value'
+                            }
+                        ],
+                        series: [
+                            {
+                                name: '价格',
+                                type: 'bar',
+                                barWidth: '60%',
+                                data: maxPriceProductValue
+                            },
+                            {
+                                name: 'Life Cost',
+                                type: 'bar',
+                                stack: 'Total',
+                                label: {
+                                    show: true,
+                                    position: 'inside'
+                                },
+                                data: maxPriceProductValue
+                            }
+                        ]
+                    };
+                    maxPriceProductEcharts.setOption(option);
+                    maxPriceProductEcharts.resize();
+                }
+            });
 
-                lineStyle: {
-                    width: 3,
-                    color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{
-                        offset: 0,
-                        color: 'rgba(255,84,108)'
-                    }, {
-                        offset: 1,
-                        color: 'rgba(252,140,118)'
-                    }], false),
-                    shadowBlur: 4,
-                    shadowColor: 'rgba(253,121,128,.2)',
-                    shadowOffsetY: 4
-                },
-                areaStyle: {
-                    color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{
-                        offset: 0,
-                        color: 'rgba(255,84,108,.15)'
-                    }, {
-                        offset: 1,
-                        color: 'rgba(252,140,118,0)'
-                    }], false),
-                },
-                smooth: true,
-                data: [20, 71, 8, 50, 57, 32]
-            },]
+            $.ajax({
+                url: '/statistical/maxWeightByProduct?startDate=' + startDate + '&endDate=' + endDate,
+                dataType: 'json', //服务器返回json格式数据
+                type: 'get', //HTTP请求类型
+                async: false,
+                success: function (result) {
+                    count.up("maxWeightProduct", {
+                        time: 4000,
+                        num: result.bean[0].weight,
+                        bit: 2,
+                        regulator: 50
+                    })
+                    $('#maxWeightProductName').html(result.bean[0].productName)
+                    let maxWeightProductTitle = [];
+                    let maxWeightProductValue = [];
+                    for (const beanElement of result.bean) {
+                        maxWeightProductTitle.push(beanElement.productName)
+                        maxWeightProductValue.push(beanElement.weight)
+                    }
+                    var option = {
+                        tooltip: {
+                            trigger: 'axis',
+                            axisPointer: {
+                                type: 'shadow'
+                            }
+                        },
+                        grid: {
+                            left: '3%',
+                            right: '4%',
+                            bottom: '3%',
+                            containLabel: true
+                        },
+                        xAxis: [
+                            {
+                                type: 'category',
+                                data: maxWeightProductTitle,
+                                axisTick: {
+                                    alignWithLabel: true
+                                }
+                            }
+                        ],
+                        yAxis: [
+                            {
+                                type: 'value'
+                            }
+                        ],
+                        series: [
+                            {
+                                name: '销量',
+                                type: 'bar',
+                                barWidth: '60%',
+                                data: maxWeightProductValue
+                            },
+                            {
+                                name: 'Life Cost',
+                                type: 'bar',
+                                stack: 'Total',
+                                label: {
+                                    show: true,
+                                    position: 'inside'
+                                },
+                                data: maxWeightProductValue
+                            }
+                        ]
+                    };
+                    maxWeightProductEcharts.setOption(option);
+                    maxWeightProductEcharts.resize();
+                }
+            });
 
-        };
-        echartsRecords.setOption(option);
+            $.ajax({
+                url: '/statistical/maxAmountByProduct?startDate=' + startDate + '&endDate=' + endDate,
+                dataType: 'json', //服务器返回json格式数据
+                type: 'get', //HTTP请求类型
+                async: false,
+                success: function (result) {
+                    count.up("maxAmountProduct", {
+                        time: 4000,
+                        num: result.bean[0].amount,
+                        bit: 2,
+                        regulator: 50
+                    })
+                    $('#maxAmountProductName').html(result.bean[0].productName)
+                    let maxAmountProductTitle = [];
+                    let maxAmountProductValue = [];
+                    for (const beanElement of result.bean) {
+                        maxAmountProductTitle.push(beanElement.productName)
+                        maxAmountProductValue.push(beanElement.amount)
+                    }
+                    var option = {
+                        tooltip: {
+                            trigger: 'axis',
+                            axisPointer: {
+                                type: 'shadow'
+                            }
+                        },
+                        grid: {
+                            left: '3%',
+                            right: '4%',
+                            bottom: '3%',
+                            containLabel: true
+                        },
+                        xAxis: [
+                            {
+                                type: 'category',
+                                data: maxAmountProductTitle,
+                                axisTick: {
+                                    alignWithLabel: true
+                                }
+                            }
+                        ],
+                        yAxis: [
+                            {
+                                type: 'value'
+                            }
+                        ],
+                        series: [
+                            {
+                                name: '销售额',
+                                type: 'bar',
+                                barWidth: '60%',
+                                data: maxAmountProductValue
+                            },
+                            {
+                                name: 'Life Cost',
+                                type: 'bar',
+                                stack: 'Total',
+                                label: {
+                                    show: true,
+                                    position: 'inside'
+                                },
+                                data: maxAmountProductValue
+                            }
+                        ]
+                    };
+                    maxAmountProductEcharts.setOption(option);
+                    maxAmountProductEcharts.resize();
+                }
+            });
 
-        window.onresize = function () {
-            echartsRecords.resize();
-            profitDynamic.resize();
+            $.ajax({
+                url: '/statistical/maxAmountByCompany?startDate=' + startDate + '&endDate=' + endDate,
+                dataType: 'json', //服务器返回json格式数据
+                type: 'get', //HTTP请求类型
+                async: false,
+                success: function (result) {
+                    count.up("maxAmountCompany", {
+                        time: 4000,
+                        num: result.bean[0].amount,
+                        bit: 2,
+                        regulator: 50
+                    })
+                    $('#maxAmountCompanyName').html(result.bean[0].companyName)
+                    let maxAmountCompanyTitle = [];
+                    let maxAmountCompanyValue = [];
+                    for (const beanElement of result.bean) {
+                        maxAmountCompanyTitle.push(beanElement.companyName)
+                        maxAmountCompanyValue.push(beanElement.amount)
+                    }
+                    var option = {
+                        tooltip: {
+                            trigger: 'axis',
+                            axisPointer: {
+                                type: 'shadow'
+                            }
+                        },
+                        grid: {
+                            left: '3%',
+                            right: '4%',
+                            bottom: '3%',
+                            containLabel: true
+                        },
+                        xAxis: [
+                            {
+                                type: 'category',
+                                data: maxAmountCompanyTitle,
+                                axisTick: {
+                                    alignWithLabel: true
+                                }
+                            }
+                        ],
+                        yAxis: [
+                            {
+                                type: 'value'
+                            }
+                        ],
+                        series: [
+                            {
+                                name: '销售额',
+                                type: 'bar',
+                                barWidth: '60%',
+                                data: maxAmountCompanyValue
+                            },
+                            {
+                                name: 'Life Cost',
+                                type: 'bar',
+                                stack: 'Total',
+                                label: {
+                                    show: true,
+                                    position: 'inside'
+                                },
+                                data: maxAmountCompanyValue
+                            }
+                        ]
+                    };
+                    maxAmountCompanyEcharts.setOption(option);
+                    maxAmountCompanyEcharts.resize();
+                }
+            });
         }
 
     });
