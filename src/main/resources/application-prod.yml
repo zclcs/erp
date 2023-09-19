@@ -1,12 +1,12 @@
 spring:
   h2:
     console:
-      enabled: true
+      enabled: false
       path: /h2-console
 
 logging:
   level:
-    com.zclcs.erp.configuration.MyBatisFlexConfiguration: info
+    com.zclcs: info
     com.zaxxer: info
     _org.springframework: info
     org.springframework: info
