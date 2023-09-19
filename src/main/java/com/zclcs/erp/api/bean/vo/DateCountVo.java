@@ -8,6 +8,7 @@ import lombok.experimental.Accessors;
 import lombok.experimental.SuperBuilder;
 
 import java.math.BigDecimal;
+import java.util.Date;
 
 /**
  * @author zclcs
@@ -18,12 +19,10 @@ import java.math.BigDecimal;
 @SuperBuilder
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-public class MaxPriceByProductVo {
+public class DateCountVo {
 
-    private Long productId;
+    private Date date;
 
-    private String productName;
-
-    private BigDecimal price;
+    private BigDecimal totalAmount = new BigDecimal("0");
 
 }

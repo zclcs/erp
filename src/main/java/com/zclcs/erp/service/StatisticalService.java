@@ -1,22 +1,27 @@
 package com.zclcs.erp.service;
 
+import cn.hutool.core.collection.CollectionUtil;
+import cn.hutool.core.date.DateField;
+import cn.hutool.core.date.DatePattern;
 import cn.hutool.core.date.DateTime;
 import cn.hutool.core.date.DateUtil;
+import cn.hutool.core.util.StrUtil;
 import com.mybatisflex.core.query.QueryWrapper;
-import com.zclcs.erp.api.bean.vo.MaxAmountByCompanyVo;
-import com.zclcs.erp.api.bean.vo.MaxAmountByProductVo;
-import com.zclcs.erp.api.bean.vo.MaxPriceByProductVo;
-import com.zclcs.erp.api.bean.vo.MaxWeightByProductVo;
+import com.zclcs.erp.api.bean.vo.DateCountVo;
+import com.zclcs.erp.api.bean.vo.MaxCountVo;
+import com.zclcs.erp.api.bean.vo.ProfitCountVo;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Optional;
+import java.math.BigDecimal;
+import java.util.*;
 
 import static com.mybatisflex.core.query.QueryMethods.max;
+import static com.mybatisflex.core.query.QueryMethods.sum;
 import static com.zclcs.erp.api.bean.entity.table.ChildOrderTableDef.CHILD_ORDER;
 import static com.zclcs.erp.api.bean.entity.table.OrdersTableDef.ORDERS;
+import static com.zclcs.erp.api.bean.entity.table.PurchaseTableDef.PURCHASE;
 
 /**
  * @author zclcs
@@ -27,85 +32,160 @@ import static com.zclcs.erp.api.bean.entity.table.OrdersTableDef.ORDERS;
 public class StatisticalService {
 
     private final ChildOrderService childOrderService;
+    private final PurchaseService purchaseService;
 
-    public List<MaxPriceByProductVo> maxPriceByProduct(Integer limit) {
-        Integer limitElse = Optional.ofNullable(limit).orElse(10);
-        QueryWrapper queryWrapper = new QueryWrapper();
+    public List<MaxCountVo> maxCount(String type, Long companyId, String startDate, String endDate, Integer limit) {
         DateTime date = DateUtil.date();
-        queryWrapper.select(
-                        CHILD_ORDER.PRODUCT_ID,
-                        CHILD_ORDER.PRODUCT_NAME,
-                        max(CHILD_ORDER.PRICE).as("price")
-                ).innerJoin(ORDERS).on(CHILD_ORDER.ORDERS_ID.eq(ORDERS.ID))
-//                .where(ORDERS.DELIVERY_DATE.between(DateUtil.beginOfMonth(date).toString(DatePattern.NORM_DATE_PATTERN),
-//                        DateUtil.endOfMonth(date).toString(DatePattern.NORM_DATE_PATTERN)))
-                .groupBy(CHILD_ORDER.PRODUCT_ID, CHILD_ORDER.PRODUCT_NAME)
-                .orderBy("price", false)
-                .limit(limitElse)
-        ;
-        List<MaxPriceByProductVo> vos = childOrderService.listAs(queryWrapper, MaxPriceByProductVo.class);
+        String startDateElse = Optional.ofNullable(startDate).filter(StrUtil::isNotBlank)
+                .orElse(DateUtil.beginOfMonth(date).toString(DatePattern.NORM_DATE_PATTERN));
+        String endDateElse = Optional.ofNullable(endDate).filter(StrUtil::isNotBlank)
+                .orElse(date.toString(DatePattern.NORM_DATE_PATTERN));
+        Integer limitElse = Optional.ofNullable(limit).orElse(10);
+        List<MaxCountVo> vos = childOrderService.listAs(invokeQueryWrapper(type, companyId, startDateElse, endDateElse, limitElse), MaxCountVo.class);
+        if (CollectionUtil.isEmpty(vos)) {
+            vos.add(new MaxCountVo());
+        }
         return vos;
     }
 
-    public List<MaxWeightByProductVo> maxWeightByProduct(Integer limit) {
-        Integer limitElse = Optional.ofNullable(limit).orElse(10);
-        QueryWrapper queryWrapper = new QueryWrapper();
+    public List<ProfitCountVo> profitCount(String type, String startDate, String endDate) {
         DateTime date = DateUtil.date();
-        queryWrapper.select(
-                        CHILD_ORDER.PRODUCT_ID,
-                        CHILD_ORDER.PRODUCT_NAME,
-                        max(CHILD_ORDER.WEIGHT).as("weight")
+        String startDateElse = Optional.ofNullable(startDate).filter(StrUtil::isNotBlank)
+                .orElse(DateUtil.beginOfYear(date).toString(DatePattern.NORM_DATE_PATTERN));
+        String endDateElse = Optional.ofNullable(endDate).filter(StrUtil::isNotBlank)
+                .orElse(DateUtil.endOfYear(date).toString(DatePattern.NORM_DATE_PATTERN));
+        List<ProfitCountVo> profitCountVos = new ArrayList<>();
+        Map<DateTime, DateTime> dateTimeDateTimeMap = invokeDate(type, startDateElse, endDateElse);
+        QueryWrapper childOrderQueryWrapper = new QueryWrapper();
+        childOrderQueryWrapper.select(
+                        ORDERS.DELIVERY_DATE.as("date"),
+                        sum(CHILD_ORDER.AMOUNT).as("total_amount")
                 ).innerJoin(ORDERS).on(CHILD_ORDER.ORDERS_ID.eq(ORDERS.ID))
-//                .where(ORDERS.DELIVERY_DATE.between(DateUtil.beginOfMonth(date).toString(DatePattern.NORM_DATE_PATTERN),
-//                        DateUtil.endOfMonth(date).toString(DatePattern.NORM_DATE_PATTERN)))
-                .groupBy(CHILD_ORDER.PRODUCT_ID, CHILD_ORDER.PRODUCT_NAME)
-                .orderBy("weight", false)
-                .limit(limitElse)
+                .where(ORDERS.DELIVERY_DATE.between(startDate, endDate))
+                .groupBy(ORDERS.DELIVERY_DATE)
         ;
-        List<MaxWeightByProductVo> vos = childOrderService.listAs(queryWrapper, MaxWeightByProductVo.class);
-        return vos;
-    }
+        List<DateCountVo> childOrderDateCountVos = childOrderService.listAs(childOrderQueryWrapper, DateCountVo.class);
 
-    public List<MaxAmountByProductVo> maxAmountByProduct(Integer limit) {
-        Integer limitElse = Optional.ofNullable(limit).orElse(10);
-        QueryWrapper queryWrapper = new QueryWrapper();
-        DateTime date = DateUtil.date();
-        queryWrapper.select(
-                        CHILD_ORDER.PRODUCT_ID,
-                        CHILD_ORDER.PRODUCT_NAME,
-                        max(CHILD_ORDER.AMOUNT).as("amount")
-                ).innerJoin(ORDERS).on(CHILD_ORDER.ORDERS_ID.eq(ORDERS.ID))
-//                .where(ORDERS.DELIVERY_DATE.between(DateUtil.beginOfMonth(date).toString(DatePattern.NORM_DATE_PATTERN),
-//                        DateUtil.endOfMonth(date).toString(DatePattern.NORM_DATE_PATTERN)))
-                .groupBy(CHILD_ORDER.PRODUCT_ID, CHILD_ORDER.PRODUCT_NAME)
-                .orderBy("amount", false)
-                .limit(limitElse)
-        ;
-        List<MaxAmountByProductVo> vos = childOrderService.listAs(queryWrapper, MaxAmountByProductVo.class);
-        return vos;
-    }
-
-    public List<MaxAmountByCompanyVo> maxAmountByCompany(Integer limit) {
-        Integer limitElse = Optional.ofNullable(limit).orElse(10);
-        QueryWrapper queryWrapper = new QueryWrapper();
-        DateTime date = DateUtil.date();
-        queryWrapper.select(
-                        ORDERS.COMPANY_ID,
-                        ORDERS.COMPANY_NAME,
-                        max(CHILD_ORDER.AMOUNT).as("amount")
-                ).innerJoin(ORDERS).on(CHILD_ORDER.ORDERS_ID.eq(ORDERS.ID))
-//                .where(ORDERS.DELIVERY_DATE.between(DateUtil.beginOfMonth(date).toString(DatePattern.NORM_DATE_PATTERN),
-//                        DateUtil.endOfMonth(date).toString(DatePattern.NORM_DATE_PATTERN)))
-                .groupBy(
-                        ORDERS.COMPANY_ID,
-                        ORDERS.COMPANY_NAME
+        QueryWrapper purchaseQueryWrapper = new QueryWrapper();
+        purchaseQueryWrapper.select(
+                        PURCHASE.PURCHASE_DATE.as("date"),
+                        sum(PURCHASE.PURCHASE_AMOUNT).as("total_amount")
                 )
-                .orderBy("amount", false)
-                .limit(limitElse)
+                .where(PURCHASE.PURCHASE_DATE.between(startDate, endDate))
+                .groupBy(PURCHASE.PURCHASE_DATE)
         ;
-        List<MaxAmountByCompanyVo> vos = childOrderService.listAs(queryWrapper, MaxAmountByCompanyVo.class);
-        return vos;
+        List<DateCountVo> purchaseDateCountVos = purchaseService.listAs(purchaseQueryWrapper, DateCountVo.class);
+
+        for (Map.Entry<DateTime, DateTime> dateTimeDateTimeEntry : dateTimeDateTimeMap.entrySet()) {
+            ProfitCountVo profitCountVo = new ProfitCountVo();
+            BigDecimal restockAmount = profitCountVo.getRestockAmount();
+            BigDecimal deliverGoodsAmount = profitCountVo.getDeliverGoodsAmount();
+            BigDecimal profitAmount = profitCountVo.getProfitAmount();
+            DateTime start = dateTimeDateTimeEntry.getKey();
+            DateTime end = dateTimeDateTimeEntry.getValue();
+            for (DateCountVo childOrderDate : childOrderDateCountVos) {
+                boolean in = DateUtil.isIn(childOrderDate.getDate(), start, end);
+                if (in) {
+                    restockAmount = restockAmount.add(childOrderDate.getTotalAmount());
+                }
+            }
+            for (DateCountVo purchaseDateCountVo : purchaseDateCountVos) {
+                boolean in = DateUtil.isIn(purchaseDateCountVo.getDate(), start, end);
+                if (in) {
+                    deliverGoodsAmount = deliverGoodsAmount.add(purchaseDateCountVo.getTotalAmount());
+                }
+            }
+            profitAmount = restockAmount.subtract(deliverGoodsAmount);
+            profitCountVo.setDate("1".equals(type) ? start.toString(DatePattern.NORM_YEAR_PATTERN) : start.toString(DatePattern.NORM_MONTH_PATTERN));
+            profitCountVo.setRestockAmount(restockAmount);
+            profitCountVo.setDeliverGoodsAmount(deliverGoodsAmount);
+            profitCountVo.setProfitAmount(profitAmount);
+            profitCountVos.add(profitCountVo);
+        }
+        return profitCountVos;
     }
 
+    private QueryWrapper invokeQueryWrapper(String type, Long companyId, String startDate, String endDate, Integer limit) {
+        QueryWrapper queryWrapper = new QueryWrapper();
+        switch (type) {
+            case "1":
+                queryWrapper.select(
+                                CHILD_ORDER.PRODUCT_ID.as("id"),
+                                CHILD_ORDER.PRODUCT_NAME.as("label"),
+                                max(CHILD_ORDER.PRICE).as("max_value")
+                        ).innerJoin(ORDERS).on(CHILD_ORDER.ORDERS_ID.eq(ORDERS.ID))
+                        .where(ORDERS.DELIVERY_DATE.between(startDate, endDate))
+                        .and(ORDERS.COMPANY_ID.eq(companyId))
+                        .groupBy("id", "label")
+                        .orderBy("max_value", false)
+                        .limit(limit)
+                ;
+                break;
+            case "2":
+                queryWrapper.select(
+                                CHILD_ORDER.PRODUCT_ID.as("id"),
+                                CHILD_ORDER.PRODUCT_NAME.as("label"),
+                                max(CHILD_ORDER.WEIGHT).as("max_value")
+                        ).innerJoin(ORDERS).on(CHILD_ORDER.ORDERS_ID.eq(ORDERS.ID))
+                        .where(ORDERS.DELIVERY_DATE.between(startDate, endDate))
+                        .and(ORDERS.COMPANY_ID.eq(companyId))
+                        .groupBy("id", "label")
+                        .orderBy("max_value", false)
+                        .limit(limit)
+                ;
+                break;
+            case "3":
+                queryWrapper.select(
+                                CHILD_ORDER.PRODUCT_ID.as("id"),
+                                CHILD_ORDER.PRODUCT_NAME.as("label"),
+                                max(CHILD_ORDER.AMOUNT).as("max_value")
+                        ).innerJoin(ORDERS).on(CHILD_ORDER.ORDERS_ID.eq(ORDERS.ID))
+                        .where(ORDERS.DELIVERY_DATE.between(startDate, endDate))
+                        .and(ORDERS.COMPANY_ID.eq(companyId))
+                        .groupBy("id", "label")
+                        .orderBy("max_value", false)
+                        .limit(limit)
+                ;
+                break;
+            case "4":
+                queryWrapper.select(
+                                ORDERS.COMPANY_ID.as("id"),
+                                ORDERS.COMPANY_NAME.as("label"),
+                                max(CHILD_ORDER.AMOUNT).as("max_value")
+                        ).innerJoin(ORDERS).on(CHILD_ORDER.ORDERS_ID.eq(ORDERS.ID))
+                        .where(ORDERS.DELIVERY_DATE.between(startDate, endDate))
+                        .groupBy(ORDERS.COMPANY_ID, ORDERS.COMPANY_NAME)
+                        .and(ORDERS.COMPANY_ID.eq(companyId))
+                        .orderBy("max_value", false)
+                        .limit(limit)
+                ;
+                break;
+            default:
+                break;
+        }
+        return queryWrapper;
+    }
+
+    private Map<DateTime, DateTime> invokeDate(String type, String startDate, String endDate) {
+        DateTime startDateParse = DateUtil.parse(startDate, DatePattern.NORM_DATE_PATTERN);
+        DateTime endDateParse = DateUtil.parse(endDate, DatePattern.NORM_DATE_PATTERN);
+        Map<DateTime, DateTime> dateGroups = new TreeMap<>();
+        if ("1".equals(type)) {
+            long betweenYear = DateUtil.betweenYear(startDateParse, endDateParse, true);
+            dateGroups.put(DateUtil.beginOfYear(startDateParse), DateUtil.endOfYear(startDateParse));
+            for (int i = 0; i < betweenYear; i++) {
+                startDateParse.offset(DateField.YEAR, 1);
+                dateGroups.put(DateUtil.beginOfYear(startDateParse), DateUtil.endOfYear(startDateParse));
+            }
+        } else {
+            long betweenMonth = DateUtil.betweenMonth(startDateParse, endDateParse, true);
+            dateGroups.put(DateUtil.beginOfMonth(startDateParse), DateUtil.endOfMonth(startDateParse));
+            for (int i = 0; i < betweenMonth; i++) {
+                startDateParse.offset(DateField.MONTH, 1);
+                dateGroups.put(DateUtil.beginOfMonth(startDateParse), DateUtil.endOfMonth(startDateParse));
+            }
+        }
+        return dateGroups;
+    }
 
 }

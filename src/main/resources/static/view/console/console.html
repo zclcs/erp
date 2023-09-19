@@ -37,6 +37,14 @@
                     </div>
                 </div>
                 <div class="layui-form-item layui-inline">
+                    <label class="layui-form-label">送货公司</label>
+                    <div class="layui-input-block">
+                        <select name="companyId" id="companyId" lay-search>
+                            <option value="">直接选择或搜索选择</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-form-item layui-inline">
                     <button class="pear-btn pear-btn-md pear-btn-primary" lay-submit lay-filter="user-query">
                         <i class="layui-icon layui-icon-search"></i>
                         查询
@@ -55,11 +63,11 @@
                 <div class="layui-card-header">单价最高产品</div>
                 <div class="layui-card-body">
                     <div class="layui-row layui-col-space5">
-                        <div class="layui-col-xs8 layui-col-md8 top-panel-number" style="color: #28333E;"
+                        <div class="layui-col-xs6 layui-col-md6 top-panel-number" style="color: #28333E;"
                              id="maxPriceProduct">
                             0
                         </div>
-                        <div class="layui-col-xs4 layui-col-md4 top-panel-tips" id="maxPriceProductName">
+                        <div class="layui-col-xs6 layui-col-md6 top-panel-tips" id="maxPriceProductName">
                         </div>
                     </div>
                 </div>
@@ -70,11 +78,11 @@
                 <div class="layui-card-header">销量最高产品</div>
                 <div class="layui-card-body">
                     <div class="layui-row layui-col-space5">
-                        <div class="layui-col-xs8 layui-col-md8 top-panel-number" style="color: #28333E;"
+                        <div class="layui-col-xs6 layui-col-md6 top-panel-number" style="color: #28333E;"
                              id="maxWeightProduct">
                             0
                         </div>
-                        <div class="layui-col-xs4 layui-col-md4 top-panel-tips" id="maxWeightProductName">
+                        <div class="layui-col-xs6 layui-col-md6 top-panel-tips" id="maxWeightProductName">
                         </div>
                     </div>
                 </div>
@@ -85,11 +93,11 @@
                 <div class="layui-card-header">销售额最高产品</div>
                 <div class="layui-card-body">
                     <div class="layui-row layui-col-space5">
-                        <div class="layui-col-xs8 layui-col-md8 top-panel-number" style="color: #28333E;"
+                        <div class="layui-col-xs6 layui-col-md6 top-panel-number" style="color: #28333E;"
                              id="maxAmountProduct">
                             0
                         </div>
-                        <div class="layui-col-xs4 layui-col-md4  top-panel-tips"
+                        <div class="layui-col-xs6 layui-col-md6  top-panel-tips"
                              id="maxAmountProductName">>
                         </div>
                     </div>
@@ -101,11 +109,11 @@
                 <div class="layui-card-header">销售额最高公司</div>
                 <div class="layui-card-body">
                     <div class="layui-row layui-col-space5">
-                        <div class="layui-col-xs8 layui-col-md8 top-panel-number" style="color: #28333E;"
+                        <div class="layui-col-xs6 layui-col-md6 top-panel-number" style="color: #28333E;"
                              id="maxAmountCompany">
                             0
                         </div>
-                        <div class="layui-col-xs4 layui-col-md4 top-panel-tips"
+                        <div class="layui-col-xs6 layui-col-md6 top-panel-tips"
                              id="maxAmountCompanyName">
                         </div>
                     </div>
@@ -219,7 +227,20 @@
             useDirtyRect: false
         });
 
-        reloadData(getNowFormatBeginOfMonthDate(), getNowFormatDate());
+        $.ajax({
+            url: '/company/list',
+            dataType: 'json', //服务器返回json格式数据
+            type: 'get', //HTTP请求类型
+            async: false,
+            success: function (result) {
+                $.each(result.bean, function (index, value) {
+                    $('#companyId').append(new Option(value.name, value.id));// 下拉菜单里添加元素
+                });
+                form.render("select");
+            }
+        });
+
+        reloadData('', getNowFormatBeginOfMonthDate(), getNowFormatDate());
 
         laydate.render({
             elem: '#ID-laydate-range',
@@ -229,7 +250,7 @@
         });
 
         form.on('submit(user-query)', function (data) {
-            reloadData(data.field.startDate, data.field.endDate);
+            reloadData(data.field.companyId, data.field.startDate, data.field.endDate);
             return false;
         });
 
@@ -244,25 +265,26 @@
             },
         });
 
-        function reloadData(startDate, endDate) {
+        function reloadData(companyId, startDate, endDate) {
             $.ajax({
-                url: '/statistical/maxPriceByProduct?startDate=' + startDate + '&endDate=' + endDate,
+                url: '/statistical/maxCount?type=1&companyId=' + companyId + '&startDate=' + startDate + '&endDate=' + endDate,
                 dataType: 'json', //服务器返回json格式数据
                 type: 'get', //HTTP请求类型
                 async: false,
                 success: function (result) {
+                    $("#maxPriceProduct").text("0");
                     count.up("maxPriceProduct", {
                         time: 4000,
-                        num: result.bean[0].price,
+                        num: result.bean[0].maxValue,
                         bit: 2,
                         regulator: 50
                     })
-                    $('#maxPriceProductName').html(result.bean[0].productName)
+                    $('#maxPriceProductName').text(result.bean[0].label)
                     let maxPriceProductTitle = [];
                     let maxPriceProductValue = [];
                     for (const beanElement of result.bean) {
-                        maxPriceProductTitle.push(beanElement.productName)
-                        maxPriceProductValue.push(beanElement.price)
+                        maxPriceProductTitle.push(beanElement.label)
+                        maxPriceProductValue.push(beanElement.maxValue)
                     }
                     var option = {
                         tooltip: {
@@ -316,23 +338,24 @@
             });
 
             $.ajax({
-                url: '/statistical/maxWeightByProduct?startDate=' + startDate + '&endDate=' + endDate,
+                url: '/statistical/maxCount?type=2&companyId=' + companyId + '&startDate=' + startDate + '&endDate=' + endDate,
                 dataType: 'json', //服务器返回json格式数据
                 type: 'get', //HTTP请求类型
                 async: false,
                 success: function (result) {
+                    $("#maxWeightProduct").text("0");
                     count.up("maxWeightProduct", {
                         time: 4000,
-                        num: result.bean[0].weight,
+                        num: result.bean[0].maxValue,
                         bit: 2,
                         regulator: 50
                     })
-                    $('#maxWeightProductName').html(result.bean[0].productName)
+                    $('#maxWeightProductName').text(result.bean[0].label)
                     let maxWeightProductTitle = [];
                     let maxWeightProductValue = [];
                     for (const beanElement of result.bean) {
-                        maxWeightProductTitle.push(beanElement.productName)
-                        maxWeightProductValue.push(beanElement.weight)
+                        maxWeightProductTitle.push(beanElement.label)
+                        maxWeightProductValue.push(beanElement.maxValue)
                     }
                     var option = {
                         tooltip: {
@@ -386,23 +409,24 @@
             });
 
             $.ajax({
-                url: '/statistical/maxAmountByProduct?startDate=' + startDate + '&endDate=' + endDate,
+                url: '/statistical/maxCount?type=3&companyId=' + companyId + '&startDate=' + startDate + '&endDate=' + endDate,
                 dataType: 'json', //服务器返回json格式数据
                 type: 'get', //HTTP请求类型
                 async: false,
                 success: function (result) {
+                    $("#maxAmountProduct").text("0");
                     count.up("maxAmountProduct", {
                         time: 4000,
-                        num: result.bean[0].amount,
+                        num: result.bean[0].maxValue,
                         bit: 2,
                         regulator: 50
                     })
-                    $('#maxAmountProductName').html(result.bean[0].productName)
+                    $('#maxAmountProductName').text(result.bean[0].label)
                     let maxAmountProductTitle = [];
                     let maxAmountProductValue = [];
                     for (const beanElement of result.bean) {
-                        maxAmountProductTitle.push(beanElement.productName)
-                        maxAmountProductValue.push(beanElement.amount)
+                        maxAmountProductTitle.push(beanElement.label)
+                        maxAmountProductValue.push(beanElement.maxValue)
                     }
                     var option = {
                         tooltip: {
@@ -456,23 +480,24 @@
             });
 
             $.ajax({
-                url: '/statistical/maxAmountByCompany?startDate=' + startDate + '&endDate=' + endDate,
+                url: '/statistical/maxCount?type=4&companyId=' + companyId + '&&startDate=' + startDate + '&endDate=' + endDate,
                 dataType: 'json', //服务器返回json格式数据
                 type: 'get', //HTTP请求类型
                 async: false,
                 success: function (result) {
+                    $("#maxAmountCompany").text("0");
                     count.up("maxAmountCompany", {
                         time: 4000,
-                        num: result.bean[0].amount,
+                        num: result.bean[0].maxValue,
                         bit: 2,
                         regulator: 50
                     })
-                    $('#maxAmountCompanyName').html(result.bean[0].companyName)
+                    $('#maxAmountCompanyName').text(result.bean[0].label)
                     let maxAmountCompanyTitle = [];
                     let maxAmountCompanyValue = [];
                     for (const beanElement of result.bean) {
-                        maxAmountCompanyTitle.push(beanElement.companyName)
-                        maxAmountCompanyValue.push(beanElement.amount)
+                        maxAmountCompanyTitle.push(beanElement.label)
+                        maxAmountCompanyValue.push(beanElement.maxValue)
                     }
                     var option = {
                         tooltip: {

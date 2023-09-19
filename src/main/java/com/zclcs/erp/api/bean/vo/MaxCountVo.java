@@ -18,12 +18,12 @@ import java.math.BigDecimal;
 @SuperBuilder
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-public class MaxAmountByCompanyVo {
+public class MaxCountVo {
 
-    private Long companyId;
+    private Long id = 0L;
 
-    private String companyName;
+    private String label = "";
 
-    private BigDecimal amount;
+    private BigDecimal maxValue = new BigDecimal("0");
 
 }

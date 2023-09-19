@@ -18,12 +18,26 @@ import java.math.BigDecimal;
 @SuperBuilder
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-public class MaxAmountByProductVo {
+public class ProfitCountVo {
 
-    private Long productId;
+    /**
+     * 统计日期
+     */
+    private String date;
 
-    private String productName;
+    /**
+     * 进货金额
+     */
+    private BigDecimal restockAmount = new BigDecimal("0");
 
-    private BigDecimal amount;
+    /**
+     * 送货金额
+     */
+    private BigDecimal deliverGoodsAmount = new BigDecimal("0");
+
+    /**
+     * 利润
+     */
+    private BigDecimal profitAmount = new BigDecimal("0");
 
 }

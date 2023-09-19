@@ -1,16 +1,16 @@
 package com.zclcs.erp.controller;
 
-import com.zclcs.erp.api.bean.vo.MaxAmountByCompanyVo;
-import com.zclcs.erp.api.bean.vo.MaxAmountByProductVo;
-import com.zclcs.erp.api.bean.vo.MaxPriceByProductVo;
-import com.zclcs.erp.api.bean.vo.MaxWeightByProductVo;
+import com.zclcs.erp.api.bean.vo.MaxCountVo;
+import com.zclcs.erp.api.bean.vo.ProfitCountVo;
 import com.zclcs.erp.core.base.BaseRsp;
 import com.zclcs.erp.service.StatisticalService;
 import com.zclcs.erp.utils.RspUtil;
+import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -27,47 +27,36 @@ public class StatisticalController {
     private final StatisticalService statisticalService;
 
     /**
-     * 统计最高单价产品
+     * 统计最大值
      *
-     * @see StatisticalService#maxPriceByProduct(Integer)
+     * @param type      1 统计最高单价产品 2 统计最高销量产品 3 统计最高销售额产品 4 统计最高销售额公司
+     * @param startDate 开始日期 默认当月一号
+     * @param endDate   结束日期 默认当天
+     * @param limit     条数 默认10
+     * @return {@link MaxCountVo}
      */
-    @GetMapping("/maxPriceByProduct")
-    public BaseRsp<List<MaxPriceByProductVo>> maxPriceByProduct(Integer limit) {
-        List<MaxPriceByProductVo> vos = this.statisticalService.maxPriceByProduct(limit);
+    @GetMapping("/maxCount")
+    public BaseRsp<List<MaxCountVo>> maxCount(@NotBlank(message = "{required}") @RequestParam String type,
+                                              @RequestParam(required = false) Long companyId,
+                                              @RequestParam(required = false) String startDate,
+                                              @RequestParam(required = false) String endDate,
+                                              @RequestParam(required = false) Integer limit) {
+        List<MaxCountVo> vos = this.statisticalService.maxCount(type, companyId, startDate, endDate, limit);
         return RspUtil.data(vos);
     }
 
     /**
-     * 统计最高销量产品
-     *
-     * @see StatisticalService#maxWeightByProduct(Integer)
+     * @param type      1 年份 2 月份
+     * @param startDate 开始日期 默认今年一号
+     * @param endDate   结束日期 默认当天
+     * @return {@link ProfitCountVo}
      */
-    @GetMapping("/maxWeightByProduct")
-    public BaseRsp<List<MaxWeightByProductVo>> maxWeightByProduct(Integer limit) {
-        List<MaxWeightByProductVo> vos = this.statisticalService.maxWeightByProduct(limit);
-        return RspUtil.data(vos);
-    }
-
-    /**
-     * 统计最高销售额产品
-     *
-     * @see StatisticalService#maxAmountByProduct(Integer)
-     */
-    @GetMapping("/maxAmountByProduct")
-    public BaseRsp<List<MaxAmountByProductVo>> maxAmountByProduct(Integer limit) {
-        List<MaxAmountByProductVo> vos = this.statisticalService.maxAmountByProduct(limit);
-        return RspUtil.data(vos);
-    }
-
-    /**
-     * 统计最高销售额公司
-     *
-     * @see StatisticalService#maxAmountByCompany(Integer)
-     */
-    @GetMapping("/maxAmountByCompany")
-    public BaseRsp<List<MaxAmountByCompanyVo>> maxAmountByCompany(Integer limit) {
-        List<MaxAmountByCompanyVo> vos = this.statisticalService.maxAmountByCompany(limit);
-        return RspUtil.data(vos);
+    @GetMapping("/profitCount")
+    public BaseRsp<List<ProfitCountVo>> profitCount(@NotBlank(message = "{required}") @RequestParam String type,
+                                                    @RequestParam(required = false) String startDate,
+                                                    @RequestParam(required = false) String endDate) {
+        List<ProfitCountVo> profitCountVos = this.statisticalService.profitCount(type, startDate, endDate);
+        return RspUtil.data(profitCountVos);
     }
 
 

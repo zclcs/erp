@@ -1,18 +1,26 @@
 [
   {
-    "id": 1,
+    "id": "statistical",
     "title": "数据统计",
     "icon": "layui-icon layui-icon-console",
     "type": 0,
     "href": "",
     "children": [
       {
-        "id": 10,
-        "title": "统计图",
+        "id": "statisticalMax",
+        "title": "营业额统计",
         "icon": "layui-icon layui-icon-console",
         "type": 1,
         "openType": "_iframe",
         "href": "view/console/console.html"
+      },
+      {
+        "id": "statisticalProfit",
+        "title": "利润统计",
+        "icon": "layui-icon layui-icon-console",
+        "type": 1,
+        "openType": "_iframe",
+        "href": "view/console/profit.html"
       }
     ]
   },
@@ -52,7 +60,7 @@
   {
     "id": "billing",
     "title": "开单",
-    "icon": "layui-icon layui-icon-set-fill",
+    "icon": "layui-icon layui-icon-rmb",
     "type": 0,
     "href": "",
     "children": [
@@ -77,7 +85,7 @@
   {
     "id": "bookkeeping",
     "title": "记账",
-    "icon": "layui-icon layui-icon-set-fill",
+    "icon": "layui-icon layui-icon-read",
     "type": 0,
     "href": "",
     "children": [
