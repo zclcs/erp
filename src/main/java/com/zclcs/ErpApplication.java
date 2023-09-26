@@ -1,6 +1,5 @@
 package com.zclcs;
 
-import lombok.extern.slf4j.Slf4j;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -13,6 +12,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class ErpApplication {
 
     public static void main(String[] args) {
+        System.setProperty("file.encoding", "UTF-8");
         System.setProperty("javax.xml.accessExternalDTD", "all");
         SpringApplication.run(ErpApplication.class, args);
     }
