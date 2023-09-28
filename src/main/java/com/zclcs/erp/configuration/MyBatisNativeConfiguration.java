@@ -1,5 +1,7 @@
 package com.zclcs.erp.configuration;
 
+import com.zclcs.erp.utils.ClazzUtil;
+import lombok.SneakyThrows;
 import org.apache.commons.logging.LogFactory;
 import org.apache.ibatis.annotations.DeleteProvider;
 import org.apache.ibatis.annotations.InsertProvider;
@@ -61,7 +63,7 @@ import java.util.stream.Stream;
  * This configuration will move to mybatis-spring-native.
  */
 @Configuration(proxyBeanMethods = false)
-@ImportRuntimeHints({MyBatisNativeConfiguration.MyBaitsRuntimeHintsRegistrar.class, ErpRuntimeHintsRegistrar.class})
+@ImportRuntimeHints({MyBatisNativeConfiguration.MyBaitsRuntimeHintsRegistrar.class, MyBatisNativeConfiguration.ErpRuntimeHintsRegistrar.class})
 public class MyBatisNativeConfiguration {
 
     @Bean
@@ -72,6 +74,26 @@ public class MyBatisNativeConfiguration {
     @Bean
     static MyBatisMapperFactoryBeanPostProcessor myBatisMapperFactoryBeanPostProcessor() {
         return new MyBatisMapperFactoryBeanPostProcessor();
+    }
+
+
+    static class ErpRuntimeHintsRegistrar implements RuntimeHintsRegistrar {
+        @SneakyThrows
+        @Override
+        public void registerHints(RuntimeHints hints, ClassLoader classLoader) {
+            Set<Class<?>> classes = ClazzUtil.getClasses("com.zclcs.erp.api");
+            classes.addAll(ClazzUtil.getClasses("com.zclcs.erp.core.base"));
+            for (Class<?> aClass : classes) {
+                hints.reflection().registerType(aClass, MemberCategory.values());
+            }
+            hints.resources()
+                    .registerPattern("banner.txt")
+                    .registerPattern("ValidationMessages.properties")
+                    .registerPattern("mapper/*")
+                    .registerPattern("templates/*")
+                    .registerPattern("sql/*")
+            ;
+        }
     }
 
     static class MyBaitsRuntimeHintsRegistrar implements RuntimeHintsRegistrar {
