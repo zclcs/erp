@@ -20,7 +20,9 @@ import java.util.*;
 import static com.mybatisflex.core.query.QueryMethods.max;
 import static com.mybatisflex.core.query.QueryMethods.sum;
 import static com.zclcs.erp.api.bean.entity.table.ChildOrderTableDef.CHILD_ORDER;
+import static com.zclcs.erp.api.bean.entity.table.CompanyTableDef.COMPANY;
 import static com.zclcs.erp.api.bean.entity.table.OrdersTableDef.ORDERS;
+import static com.zclcs.erp.api.bean.entity.table.ProductTableDef.PRODUCT;
 import static com.zclcs.erp.api.bean.entity.table.PurchaseTableDef.PURCHASE;
 
 /**
@@ -86,16 +88,16 @@ public class StatisticalService {
             for (DateCountVo childOrderDate : childOrderDateCountVos) {
                 boolean in = DateUtil.isIn(childOrderDate.getDate(), start, end);
                 if (in) {
-                    restockAmount = restockAmount.add(childOrderDate.getTotalAmount());
+                    deliverGoodsAmount = deliverGoodsAmount.add(childOrderDate.getTotalAmount());
                 }
             }
             for (DateCountVo purchaseDateCountVo : purchaseDateCountVos) {
                 boolean in = DateUtil.isIn(purchaseDateCountVo.getDate(), start, end);
                 if (in) {
-                    deliverGoodsAmount = deliverGoodsAmount.add(purchaseDateCountVo.getTotalAmount());
+                    restockAmount = restockAmount.add(purchaseDateCountVo.getTotalAmount());
                 }
             }
-            profitAmount = restockAmount.subtract(deliverGoodsAmount);
+            profitAmount = deliverGoodsAmount.subtract(restockAmount);
             profitCountVo.setDate("1".equals(type) ? start.toString(DatePattern.NORM_YEAR_PATTERN) : start.toString(DatePattern.NORM_MONTH_PATTERN));
             profitCountVo.setRestockAmount(restockAmount);
             profitCountVo.setDeliverGoodsAmount(deliverGoodsAmount);
@@ -111,9 +113,11 @@ public class StatisticalService {
             case "1":
                 queryWrapper.select(
                                 CHILD_ORDER.PRODUCT_ID.as("id"),
-                                CHILD_ORDER.PRODUCT_NAME.as("label"),
+                                PRODUCT.NAME.as("label"),
                                 max(CHILD_ORDER.PRICE).as("max_value")
-                        ).innerJoin(ORDERS).on(CHILD_ORDER.ORDERS_ID.eq(ORDERS.ID))
+                        )
+                        .innerJoin(PRODUCT).on(CHILD_ORDER.PRODUCT_ID.eq(PRODUCT.ID))
+                        .innerJoin(ORDERS).on(CHILD_ORDER.ORDERS_ID.eq(ORDERS.ID))
                         .where(ORDERS.DELIVERY_DATE.between(startDate, endDate))
                         .and(ORDERS.COMPANY_ID.eq(companyId))
                         .groupBy("id", "label")
@@ -124,9 +128,11 @@ public class StatisticalService {
             case "2":
                 queryWrapper.select(
                                 CHILD_ORDER.PRODUCT_ID.as("id"),
-                                CHILD_ORDER.PRODUCT_NAME.as("label"),
+                                PRODUCT.NAME.as("label"),
                                 max(CHILD_ORDER.WEIGHT).as("max_value")
-                        ).innerJoin(ORDERS).on(CHILD_ORDER.ORDERS_ID.eq(ORDERS.ID))
+                        )
+                        .innerJoin(PRODUCT).on(CHILD_ORDER.PRODUCT_ID.eq(PRODUCT.ID))
+                        .innerJoin(ORDERS).on(CHILD_ORDER.ORDERS_ID.eq(ORDERS.ID))
                         .where(ORDERS.DELIVERY_DATE.between(startDate, endDate))
                         .and(ORDERS.COMPANY_ID.eq(companyId))
                         .groupBy("id", "label")
@@ -137,9 +143,11 @@ public class StatisticalService {
             case "3":
                 queryWrapper.select(
                                 CHILD_ORDER.PRODUCT_ID.as("id"),
-                                CHILD_ORDER.PRODUCT_NAME.as("label"),
+                                PRODUCT.NAME.as("label"),
                                 max(CHILD_ORDER.AMOUNT).as("max_value")
-                        ).innerJoin(ORDERS).on(CHILD_ORDER.ORDERS_ID.eq(ORDERS.ID))
+                        )
+                        .innerJoin(PRODUCT).on(CHILD_ORDER.PRODUCT_ID.eq(PRODUCT.ID))
+                        .innerJoin(ORDERS).on(CHILD_ORDER.ORDERS_ID.eq(ORDERS.ID))
                         .where(ORDERS.DELIVERY_DATE.between(startDate, endDate))
                         .and(ORDERS.COMPANY_ID.eq(companyId))
                         .groupBy("id", "label")
@@ -150,11 +158,13 @@ public class StatisticalService {
             case "4":
                 queryWrapper.select(
                                 ORDERS.COMPANY_ID.as("id"),
-                                ORDERS.COMPANY_NAME.as("label"),
+                                COMPANY.NAME.as("label"),
                                 max(CHILD_ORDER.AMOUNT).as("max_value")
-                        ).innerJoin(ORDERS).on(CHILD_ORDER.ORDERS_ID.eq(ORDERS.ID))
+                        )
+                        .innerJoin(COMPANY).on(ORDERS.COMPANY_ID.eq(COMPANY.ID))
+                        .innerJoin(ORDERS).on(CHILD_ORDER.ORDERS_ID.eq(ORDERS.ID))
                         .where(ORDERS.DELIVERY_DATE.between(startDate, endDate))
-                        .groupBy(ORDERS.COMPANY_ID, ORDERS.COMPANY_NAME)
+                        .groupBy(ORDERS.COMPANY_ID, COMPANY.NAME)
                         .and(ORDERS.COMPANY_ID.eq(companyId))
                         .orderBy("max_value", false)
                         .limit(limit)

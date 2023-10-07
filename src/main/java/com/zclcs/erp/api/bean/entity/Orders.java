@@ -46,22 +46,10 @@ public class Orders implements Serializable {
     private Long companyId;
 
     /**
-     * 公司名称
-     */
-    @Column("company_name")
-    private String companyName;
-
-    /**
      * 送货日期
      */
     @Column("delivery_date")
     private LocalDate deliveryDate;
-
-    /**
-     * 状态 1 有效 0 删除
-     */
-    @Column("orders_status")
-    private Integer ordersStatus;
 
 
 }

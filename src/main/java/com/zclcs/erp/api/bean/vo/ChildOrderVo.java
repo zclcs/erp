@@ -90,12 +90,6 @@ public class ChildOrderVo implements Serializable {
     private String remark;
 
     /**
-     * 状态 1 有效 0 删除
-     * 默认值：
-     */
-    private Integer childOrderStatus;
-
-    /**
      * kg/桶
      */
     private String specificationString;

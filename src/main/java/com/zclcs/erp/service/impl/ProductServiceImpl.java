@@ -11,6 +11,7 @@ import com.zclcs.erp.api.bean.vo.ProductVo;
 import com.zclcs.erp.core.base.BasePage;
 import com.zclcs.erp.core.base.BasePageAo;
 import com.zclcs.erp.exception.FieldException;
+import com.zclcs.erp.mapper.ChildOrderMapper;
 import com.zclcs.erp.mapper.ProductMapper;
 import com.zclcs.erp.service.ProductService;
 import lombok.RequiredArgsConstructor;
@@ -21,6 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.zclcs.erp.api.bean.entity.table.ChildOrderTableDef.CHILD_ORDER;
 import static com.zclcs.erp.api.bean.entity.table.ProductTableDef.PRODUCT;
 
 /**
@@ -33,6 +35,8 @@ import static com.zclcs.erp.api.bean.entity.table.ProductTableDef.PRODUCT;
 @Service
 @RequiredArgsConstructor
 public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> implements ProductService {
+
+    private final ChildOrderMapper childOrderMapper;
 
     @Override
     public BasePage<ProductVo> findProductPage(BasePageAo basePageAo, ProductVo productVo) {
@@ -139,6 +143,9 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void deleteProduct(List<Long> ids) {
+        if (childOrderMapper.selectCountByQuery(new QueryWrapper().where(CHILD_ORDER.PRODUCT_ID.in(ids))) != 0L) {
+            throw new FieldException("该产品已创建子订单，不能删除，请删除对应子订单之后再操作");
+        }
         this.removeByIds(ids);
     }
 

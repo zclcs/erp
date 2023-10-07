@@ -7,7 +7,6 @@ import com.mybatisflex.core.query.QueryWrapper;
 import com.mybatisflex.spring.service.impl.ServiceImpl;
 import com.zclcs.erp.api.bean.ao.ChildOrderAo;
 import com.zclcs.erp.api.bean.entity.ChildOrder;
-import com.zclcs.erp.api.bean.entity.Product;
 import com.zclcs.erp.api.bean.vo.ChildOrderVo;
 import com.zclcs.erp.core.base.BasePage;
 import com.zclcs.erp.core.base.BasePageAo;
@@ -27,6 +26,7 @@ import java.util.List;
 import static com.zclcs.erp.api.bean.entity.table.ChildOrderBillTableDef.CHILD_ORDER_BILL;
 import static com.zclcs.erp.api.bean.entity.table.ChildOrderTableDef.CHILD_ORDER;
 import static com.zclcs.erp.api.bean.entity.table.OrdersTableDef.ORDERS;
+import static com.zclcs.erp.api.bean.entity.table.ProductTableDef.PRODUCT;
 
 /**
  * 子订单 Service实现
@@ -86,16 +86,16 @@ public class ChildOrderServiceImpl extends ServiceImpl<ChildOrderMapper, ChildOr
                         CHILD_ORDER.ID,
                         CHILD_ORDER.ORDERS_ID,
                         CHILD_ORDER.PRODUCT_ID,
-                        CHILD_ORDER.PRODUCT_NAME,
+                        PRODUCT.NAME.as("productName"),
                         CHILD_ORDER.SPECIFICATION,
                         CHILD_ORDER.NUMBER,
                         CHILD_ORDER.WEIGHT,
                         CHILD_ORDER.PRICE,
                         CHILD_ORDER.AMOUNT,
                         CHILD_ORDER.REMARK,
-                        CHILD_ORDER.CHILD_ORDER_STATUS,
                         ORDERS.DELIVERY_DATE.as("delivery_date_original")
                 )
+                .innerJoin(PRODUCT).on(CHILD_ORDER.PRODUCT_ID.eq(PRODUCT.ID))
                 .innerJoin(
                         CHILD_ORDER_BILL
                 ).on(CHILD_ORDER.ID.eq(CHILD_ORDER_BILL.CHILD_ORDER_ID))
@@ -114,21 +114,21 @@ public class ChildOrderServiceImpl extends ServiceImpl<ChildOrderMapper, ChildOr
                         CHILD_ORDER.ID,
                         CHILD_ORDER.ORDERS_ID,
                         CHILD_ORDER.PRODUCT_ID,
-                        CHILD_ORDER.PRODUCT_NAME,
+                        PRODUCT.NAME.as("productName"),
                         CHILD_ORDER.SPECIFICATION,
                         CHILD_ORDER.NUMBER,
                         CHILD_ORDER.WEIGHT,
                         CHILD_ORDER.PRICE,
                         CHILD_ORDER.AMOUNT,
                         CHILD_ORDER.REMARK,
-                        CHILD_ORDER.CHILD_ORDER_STATUS,
                         ORDERS.DELIVERY_DATE.as("delivery_date_original")
                 )
+                .innerJoin(PRODUCT).on(CHILD_ORDER.PRODUCT_ID.eq(PRODUCT.ID))
                 .innerJoin(
                         ORDERS
                 ).on(CHILD_ORDER.ORDERS_ID.eq(ORDERS.ID))
                 .where(CHILD_ORDER.ORDERS_ID.eq(childOrderVo.getOrdersId()))
-                .and(CHILD_ORDER.PRODUCT_NAME.like(childOrderVo.getProductName(), If::hasText))
+                .and(PRODUCT.NAME.like(childOrderVo.getProductName(), If::hasText))
                 .orderBy(CHILD_ORDER.ID.desc())
         ;
         return queryWrapper;
@@ -206,11 +206,8 @@ public class ChildOrderServiceImpl extends ServiceImpl<ChildOrderMapper, ChildOr
     }
 
     private void setChildOrder(ChildOrder childOrder) {
-        Product product = productService.getById(childOrder.getProductId());
-        childOrder.setProductName(product.getName());
         childOrder.setWeight(childOrder.getSpecification() * childOrder.getNumber());
         childOrder.setAmount(new BigDecimal(childOrder.getWeight()).multiply(childOrder.getPrice()));
-        childOrder.setChildOrderStatus(1);
     }
 
 }

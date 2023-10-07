@@ -47,12 +47,6 @@ public class Purchase implements Serializable {
     private Long productCompanyId;
 
     /**
-     * 进货公司名称
-     */
-    @Column("product_company_name")
-    private String productCompanyName;
-
-    /**
      * 进货日期
      */
     @Column("purchase_date")

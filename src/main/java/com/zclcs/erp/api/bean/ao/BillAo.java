@@ -42,13 +42,6 @@ public class BillAo implements Serializable {
     private Long companyId;
 
     /**
-     * 公司名称
-     * 默认值：
-     */
-    @Size(max = 255, message = "{noMoreThan}")
-    private String companyName;
-
-    /**
      * 对账单生成日期
      * 默认值：
      */

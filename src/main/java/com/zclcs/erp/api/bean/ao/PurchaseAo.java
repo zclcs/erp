@@ -2,7 +2,6 @@ package com.zclcs.erp.api.bean.ao;
 
 import com.zclcs.erp.core.strategy.ValidGroups;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
 import lombok.*;
 import lombok.experimental.Accessors;
 
@@ -40,13 +39,6 @@ public class PurchaseAo implements Serializable {
      * 默认值：
      */
     private Long productCompanyId;
-
-    /**
-     * 进货公司名称
-     * 默认值：
-     */
-    @Size(max = 255, message = "{noMoreThan}")
-    private String productCompanyName;
 
     /**
      * 进货日期

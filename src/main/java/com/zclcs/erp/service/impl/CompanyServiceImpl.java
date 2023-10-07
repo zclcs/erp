@@ -11,7 +11,9 @@ import com.zclcs.erp.api.bean.vo.CompanyVo;
 import com.zclcs.erp.core.base.BasePage;
 import com.zclcs.erp.core.base.BasePageAo;
 import com.zclcs.erp.exception.FieldException;
+import com.zclcs.erp.mapper.BillMapper;
 import com.zclcs.erp.mapper.CompanyMapper;
+import com.zclcs.erp.mapper.OrdersMapper;
 import com.zclcs.erp.service.CompanyService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,7 +23,9 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.zclcs.erp.api.bean.entity.table.BillTableDef.BILL;
 import static com.zclcs.erp.api.bean.entity.table.CompanyTableDef.COMPANY;
+import static com.zclcs.erp.api.bean.entity.table.OrdersTableDef.ORDERS;
 
 /**
  * 公司 Service实现
@@ -33,6 +37,9 @@ import static com.zclcs.erp.api.bean.entity.table.CompanyTableDef.COMPANY;
 @Service
 @RequiredArgsConstructor
 public class CompanyServiceImpl extends ServiceImpl<CompanyMapper, Company> implements CompanyService {
+
+    private final BillMapper billMapper;
+    private final OrdersMapper ordersMapper;
 
     @Override
     public BasePage<CompanyVo> findCompanyPage(BasePageAo basePageAo, CompanyVo companyVo) {
@@ -139,6 +146,12 @@ public class CompanyServiceImpl extends ServiceImpl<CompanyMapper, Company> impl
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void deleteCompany(List<Long> ids) {
+        if (billMapper.selectCountByQuery(new QueryWrapper().where(BILL.COMPANY_ID.in(ids))) != 0L) {
+            throw new FieldException("该公司已生成对账单，不能删除，请删除对应对账单之后再操作");
+        }
+        if (ordersMapper.selectCountByQuery(new QueryWrapper().where(ORDERS.COMPANY_ID.in(ids))) != 0L) {
+            throw new FieldException("该公司已创建订单，不能删除，请删除对应订单之后再操作");
+        }
         this.removeByIds(ids);
     }
 

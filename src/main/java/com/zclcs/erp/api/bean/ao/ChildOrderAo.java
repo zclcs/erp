@@ -49,13 +49,6 @@ public class ChildOrderAo implements Serializable {
     private Long productId;
 
     /**
-     * 子产品名称
-     * 默认值：
-     */
-    @Size(max = 255, message = "{noMoreThan}")
-    private String productName;
-
-    /**
      * 规格型号/桶
      * 默认值：
      */
@@ -94,13 +87,6 @@ public class ChildOrderAo implements Serializable {
      */
     @Size(max = 255, message = "{noMoreThan}")
     private String remark;
-
-    /**
-     * 状态 1 有效 0 删除
-     * 默认值：
-     */
-    @NotNull(message = "{required}")
-    private Integer childOrderStatus;
 
 
 }

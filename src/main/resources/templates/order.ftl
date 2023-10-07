@@ -1,27 +1,25 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <?mso-application progid="Word.Document"?>
-<w:wordDocument
-        xmlns:o="urn:schemas-microsoft-com:office:office"
-        xmlns:v="urn:schemas-microsoft-com:vml"
-        xmlns:w="http://schemas.microsoft.com/office/word/2003/wordml"
-        xmlns:wx="http://schemas.microsoft.com/office/word/2003/auxHint"
-        xmlns:wsp="http://schemas.microsoft.com/office/word/2003/wordml/sp2"
-        w:macrosPresent="no" w:embeddedObjPresent="no" w:ocxPresent="no" xml:space="preserve">
-  <w:ignoreSubtree w:val="http://schemas.microsoft.com/office/word/2003/wordml/sp2"/>
+<w:wordDocument xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:v="urn:schemas-microsoft-com:vml"
+                xmlns:w="http://schemas.microsoft.com/office/word/2003/wordml"
+                xmlns:wx="http://schemas.microsoft.com/office/word/2003/auxHint"
+                xmlns:wsp="http://schemas.microsoft.com/office/word/2003/wordml/sp2"
+                w:macrosPresent="no" w:embeddedObjPresent="no" w:ocxPresent="no" xml:space="preserve"><w:ignoreSubtree
+            w:val="http://schemas.microsoft.com/office/word/2003/wordml/sp2"/>
     <o:DocumentProperties>
         <o:Author>86176</o:Author>
-        <o:LastAuthor>周 成龙</o:LastAuthor>
-        <o:Revision>2</o:Revision>
-        <o:TotalTime>0</o:TotalTime>
+        <o:LastAuthor>chenglong zhou</o:LastAuthor>
+        <o:Revision>3</o:Revision>
+        <o:TotalTime>3</o:TotalTime>
         <o:LastPrinted>2020-03-09T13:49:00Z</o:LastPrinted>
         <o:Created>2020-03-12T09:54:00Z</o:Created>
-        <o:LastSaved>2020-03-12T09:54:00Z</o:LastSaved>
+        <o:LastSaved>2023-10-04T04:44:00Z</o:LastSaved>
         <o:Pages>1</o:Pages>
-        <o:Words>97</o:Words>
-        <o:Characters>553</o:Characters>
+        <o:Words>89</o:Words>
+        <o:Characters>512</o:Characters>
         <o:Lines>4</o:Lines>
         <o:Paragraphs>1</o:Paragraphs>
-        <o:CharactersWithSpaces>649</o:CharactersWithSpaces>
+        <o:CharactersWithSpaces>600</o:CharactersWithSpaces>
         <o:Version>16</o:Version>
     </o:DocumentProperties>
     <w:fonts>
@@ -39,7 +37,7 @@
             <w:charset w:val="00"/>
             <w:family w:val="Roman"/>
             <w:pitch w:val="variable"/>
-            <w:sig w:usb-0="00000003" w:usb-1="00000000" w:usb-2="00000000" w:usb-3="00000000" w:csb-0="00000001"
+            <w:sig w:usb-0="E00006FF" w:usb-1="420024FF" w:usb-2="02000000" w:usb-3="00000000" w:csb-0="0000019F"
                    w:csb-1="00000000"/>
         </w:font>
         <w:font w:name="等线">
@@ -144,7 +142,7 @@
                 </w:pPr>
             </w:lvl>
         </w:listDef>
-        <w:list w:ilfo="1">
+        <w:list w:ilfo="1" durableId="104547559">
             <w:ilst w:val="0"/>
             <w:lvlOverride w:ilvl="0">
                 <w:startOverride w:val="1"/>
@@ -188,107 +186,12 @@
             <w:lsdException w:name="heading 7"/>
             <w:lsdException w:name="heading 8"/>
             <w:lsdException w:name="heading 9"/>
-            <w:lsdException w:name="index 1"/>
-            <w:lsdException w:name="index 2"/>
-            <w:lsdException w:name="index 3"/>
-            <w:lsdException w:name="index 4"/>
-            <w:lsdException w:name="index 5"/>
-            <w:lsdException w:name="index 6"/>
-            <w:lsdException w:name="index 7"/>
-            <w:lsdException w:name="index 8"/>
-            <w:lsdException w:name="index 9"/>
-            <w:lsdException w:name="toc 1"/>
-            <w:lsdException w:name="toc 2"/>
-            <w:lsdException w:name="toc 3"/>
-            <w:lsdException w:name="toc 4"/>
-            <w:lsdException w:name="toc 5"/>
-            <w:lsdException w:name="toc 6"/>
-            <w:lsdException w:name="toc 7"/>
-            <w:lsdException w:name="toc 8"/>
-            <w:lsdException w:name="toc 9"/>
-            <w:lsdException w:name="Normal Indent"/>
-            <w:lsdException w:name="footnote text"/>
-            <w:lsdException w:name="annotation text"/>
-            <w:lsdException w:name="header"/>
-            <w:lsdException w:name="footer"/>
-            <w:lsdException w:name="index heading"/>
             <w:lsdException w:name="caption"/>
-            <w:lsdException w:name="table of figures"/>
-            <w:lsdException w:name="envelope address"/>
-            <w:lsdException w:name="envelope return"/>
-            <w:lsdException w:name="footnote reference"/>
-            <w:lsdException w:name="annotation reference"/>
-            <w:lsdException w:name="line number"/>
-            <w:lsdException w:name="page number"/>
-            <w:lsdException w:name="endnote reference"/>
-            <w:lsdException w:name="endnote text"/>
-            <w:lsdException w:name="table of authorities"/>
-            <w:lsdException w:name="macro"/>
-            <w:lsdException w:name="toa heading"/>
-            <w:lsdException w:name="List"/>
-            <w:lsdException w:name="List Bullet"/>
-            <w:lsdException w:name="List Number"/>
-            <w:lsdException w:name="List 2"/>
-            <w:lsdException w:name="List 3"/>
-            <w:lsdException w:name="List 4"/>
-            <w:lsdException w:name="List 5"/>
-            <w:lsdException w:name="List Bullet 2"/>
-            <w:lsdException w:name="List Bullet 3"/>
-            <w:lsdException w:name="List Bullet 4"/>
-            <w:lsdException w:name="List Bullet 5"/>
-            <w:lsdException w:name="List Number 2"/>
-            <w:lsdException w:name="List Number 3"/>
-            <w:lsdException w:name="List Number 4"/>
-            <w:lsdException w:name="List Number 5"/>
             <w:lsdException w:name="Title"/>
-            <w:lsdException w:name="Closing"/>
-            <w:lsdException w:name="Signature"/>
-            <w:lsdException w:name="Default Paragraph Font"/>
-            <w:lsdException w:name="Body Text"/>
-            <w:lsdException w:name="Body Text Indent"/>
-            <w:lsdException w:name="List Continue"/>
-            <w:lsdException w:name="List Continue 2"/>
-            <w:lsdException w:name="List Continue 3"/>
-            <w:lsdException w:name="List Continue 4"/>
-            <w:lsdException w:name="List Continue 5"/>
-            <w:lsdException w:name="Message Header"/>
             <w:lsdException w:name="Subtitle"/>
-            <w:lsdException w:name="Salutation"/>
-            <w:lsdException w:name="Date"/>
-            <w:lsdException w:name="Body Text First Indent"/>
-            <w:lsdException w:name="Body Text First Indent 2"/>
-            <w:lsdException w:name="Note Heading"/>
-            <w:lsdException w:name="Body Text 2"/>
-            <w:lsdException w:name="Body Text 3"/>
-            <w:lsdException w:name="Body Text Indent 2"/>
-            <w:lsdException w:name="Body Text Indent 3"/>
-            <w:lsdException w:name="Block Text"/>
-            <w:lsdException w:name="Hyperlink"/>
-            <w:lsdException w:name="FollowedHyperlink"/>
             <w:lsdException w:name="Strong"/>
             <w:lsdException w:name="Emphasis"/>
-            <w:lsdException w:name="Document Map"/>
-            <w:lsdException w:name="Plain Text"/>
-            <w:lsdException w:name="E-mail Signature"/>
-            <w:lsdException w:name="HTML Top of Form"/>
-            <w:lsdException w:name="HTML Bottom of Form"/>
-            <w:lsdException w:name="Normal (Web)"/>
-            <w:lsdException w:name="HTML Acronym"/>
-            <w:lsdException w:name="HTML Address"/>
-            <w:lsdException w:name="HTML Cite"/>
-            <w:lsdException w:name="HTML Code"/>
-            <w:lsdException w:name="HTML Definition"/>
-            <w:lsdException w:name="HTML Keyboard"/>
-            <w:lsdException w:name="HTML Preformatted"/>
-            <w:lsdException w:name="HTML Sample"/>
-            <w:lsdException w:name="HTML Typewriter"/>
-            <w:lsdException w:name="HTML Variable"/>
             <w:lsdException w:name="Normal Table"/>
-            <w:lsdException w:name="annotation subject"/>
-            <w:lsdException w:name="No List"/>
-            <w:lsdException w:name="Outline List 1"/>
-            <w:lsdException w:name="Outline List 2"/>
-            <w:lsdException w:name="Outline List 3"/>
             <w:lsdException w:name="Table Simple 1"/>
             <w:lsdException w:name="Table Simple 2"/>
             <w:lsdException w:name="Table Simple 3"/>
@@ -331,10 +234,7 @@
             <w:lsdException w:name="Table Web 1"/>
             <w:lsdException w:name="Table Web 2"/>
             <w:lsdException w:name="Table Web 3"/>
-            <w:lsdException w:name="Balloon Text"/>
-            <w:lsdException w:name="Table Grid"/>
             <w:lsdException w:name="Table Theme"/>
-            <w:lsdException w:name="Placeholder Text"/>
             <w:lsdException w:name="No Spacing"/>
             <w:lsdException w:name="Light Shading"/>
             <w:lsdException w:name="Light List"/>
@@ -356,7 +256,6 @@
             <w:lsdException w:name="Medium Shading 1 Accent 1"/>
             <w:lsdException w:name="Medium Shading 2 Accent 1"/>
             <w:lsdException w:name="Medium List 1 Accent 1"/>
-            <w:lsdException w:name="Revision"/>
             <w:lsdException w:name="List Paragraph"/>
             <w:lsdException w:name="Quote"/>
             <w:lsdException w:name="Intense Quote"/>
@@ -443,117 +342,7 @@
             <w:lsdException w:name="Subtle Reference"/>
             <w:lsdException w:name="Intense Reference"/>
             <w:lsdException w:name="Book Title"/>
-            <w:lsdException w:name="Bibliography"/>
             <w:lsdException w:name="TOC Heading"/>
-            <w:lsdException w:name="Plain Table 1"/>
-            <w:lsdException w:name="Plain Table 2"/>
-            <w:lsdException w:name="Plain Table 3"/>
-            <w:lsdException w:name="Plain Table 4"/>
-            <w:lsdException w:name="Plain Table 5"/>
-            <w:lsdException w:name="Grid Table Light"/>
-            <w:lsdException w:name="Grid Table 1 Light"/>
-            <w:lsdException w:name="Grid Table 2"/>
-            <w:lsdException w:name="Grid Table 3"/>
-            <w:lsdException w:name="Grid Table 4"/>
-            <w:lsdException w:name="Grid Table 5 Dark"/>
-            <w:lsdException w:name="Grid Table 6 Colorful"/>
-            <w:lsdException w:name="Grid Table 7 Colorful"/>
-            <w:lsdException w:name="Grid Table 1 Light Accent 1"/>
-            <w:lsdException w:name="Grid Table 2 Accent 1"/>
-            <w:lsdException w:name="Grid Table 3 Accent 1"/>
-            <w:lsdException w:name="Grid Table 4 Accent 1"/>
-            <w:lsdException w:name="Grid Table 5 Dark Accent 1"/>
-            <w:lsdException w:name="Grid Table 6 Colorful Accent 1"/>
-            <w:lsdException w:name="Grid Table 7 Colorful Accent 1"/>
-            <w:lsdException w:name="Grid Table 1 Light Accent 2"/>
-            <w:lsdException w:name="Grid Table 2 Accent 2"/>
-            <w:lsdException w:name="Grid Table 3 Accent 2"/>
-            <w:lsdException w:name="Grid Table 4 Accent 2"/>
-            <w:lsdException w:name="Grid Table 5 Dark Accent 2"/>
-            <w:lsdException w:name="Grid Table 6 Colorful Accent 2"/>
-            <w:lsdException w:name="Grid Table 7 Colorful Accent 2"/>
-            <w:lsdException w:name="Grid Table 1 Light Accent 3"/>
-            <w:lsdException w:name="Grid Table 2 Accent 3"/>
-            <w:lsdException w:name="Grid Table 3 Accent 3"/>
-            <w:lsdException w:name="Grid Table 4 Accent 3"/>
-            <w:lsdException w:name="Grid Table 5 Dark Accent 3"/>
-            <w:lsdException w:name="Grid Table 6 Colorful Accent 3"/>
-            <w:lsdException w:name="Grid Table 7 Colorful Accent 3"/>
-            <w:lsdException w:name="Grid Table 1 Light Accent 4"/>
-            <w:lsdException w:name="Grid Table 2 Accent 4"/>
-            <w:lsdException w:name="Grid Table 3 Accent 4"/>
-            <w:lsdException w:name="Grid Table 4 Accent 4"/>
-            <w:lsdException w:name="Grid Table 5 Dark Accent 4"/>
-            <w:lsdException w:name="Grid Table 6 Colorful Accent 4"/>
-            <w:lsdException w:name="Grid Table 7 Colorful Accent 4"/>
-            <w:lsdException w:name="Grid Table 1 Light Accent 5"/>
-            <w:lsdException w:name="Grid Table 2 Accent 5"/>
-            <w:lsdException w:name="Grid Table 3 Accent 5"/>
-            <w:lsdException w:name="Grid Table 4 Accent 5"/>
-            <w:lsdException w:name="Grid Table 5 Dark Accent 5"/>
-            <w:lsdException w:name="Grid Table 6 Colorful Accent 5"/>
-            <w:lsdException w:name="Grid Table 7 Colorful Accent 5"/>
-            <w:lsdException w:name="Grid Table 1 Light Accent 6"/>
-            <w:lsdException w:name="Grid Table 2 Accent 6"/>
-            <w:lsdException w:name="Grid Table 3 Accent 6"/>
-            <w:lsdException w:name="Grid Table 4 Accent 6"/>
-            <w:lsdException w:name="Grid Table 5 Dark Accent 6"/>
-            <w:lsdException w:name="Grid Table 6 Colorful Accent 6"/>
-            <w:lsdException w:name="Grid Table 7 Colorful Accent 6"/>
-            <w:lsdException w:name="List Table 1 Light"/>
-            <w:lsdException w:name="List Table 2"/>
-            <w:lsdException w:name="List Table 3"/>
-            <w:lsdException w:name="List Table 4"/>
-            <w:lsdException w:name="List Table 5 Dark"/>
-            <w:lsdException w:name="List Table 6 Colorful"/>
-            <w:lsdException w:name="List Table 7 Colorful"/>
-            <w:lsdException w:name="List Table 1 Light Accent 1"/>
-            <w:lsdException w:name="List Table 2 Accent 1"/>
-            <w:lsdException w:name="List Table 3 Accent 1"/>
-            <w:lsdException w:name="List Table 4 Accent 1"/>
-            <w:lsdException w:name="List Table 5 Dark Accent 1"/>
-            <w:lsdException w:name="List Table 6 Colorful Accent 1"/>
-            <w:lsdException w:name="List Table 7 Colorful Accent 1"/>
-            <w:lsdException w:name="List Table 1 Light Accent 2"/>
-            <w:lsdException w:name="List Table 2 Accent 2"/>
-            <w:lsdException w:name="List Table 3 Accent 2"/>
-            <w:lsdException w:name="List Table 4 Accent 2"/>
-            <w:lsdException w:name="List Table 5 Dark Accent 2"/>
-            <w:lsdException w:name="List Table 6 Colorful Accent 2"/>
-            <w:lsdException w:name="List Table 7 Colorful Accent 2"/>
-            <w:lsdException w:name="List Table 1 Light Accent 3"/>
-            <w:lsdException w:name="List Table 2 Accent 3"/>
-            <w:lsdException w:name="List Table 3 Accent 3"/>
-            <w:lsdException w:name="List Table 4 Accent 3"/>
-            <w:lsdException w:name="List Table 5 Dark Accent 3"/>
-            <w:lsdException w:name="List Table 6 Colorful Accent 3"/>
-            <w:lsdException w:name="List Table 7 Colorful Accent 3"/>
-            <w:lsdException w:name="List Table 1 Light Accent 4"/>
-            <w:lsdException w:name="List Table 2 Accent 4"/>
-            <w:lsdException w:name="List Table 3 Accent 4"/>
-            <w:lsdException w:name="List Table 4 Accent 4"/>
-            <w:lsdException w:name="List Table 5 Dark Accent 4"/>
-            <w:lsdException w:name="List Table 6 Colorful Accent 4"/>
-            <w:lsdException w:name="List Table 7 Colorful Accent 4"/>
-            <w:lsdException w:name="List Table 1 Light Accent 5"/>
-            <w:lsdException w:name="List Table 2 Accent 5"/>
-            <w:lsdException w:name="List Table 3 Accent 5"/>
-            <w:lsdException w:name="List Table 4 Accent 5"/>
-            <w:lsdException w:name="List Table 5 Dark Accent 5"/>
-            <w:lsdException w:name="List Table 6 Colorful Accent 5"/>
-            <w:lsdException w:name="List Table 7 Colorful Accent 5"/>
-            <w:lsdException w:name="List Table 1 Light Accent 6"/>
-            <w:lsdException w:name="List Table 2 Accent 6"/>
-            <w:lsdException w:name="List Table 3 Accent 6"/>
-            <w:lsdException w:name="List Table 4 Accent 6"/>
-            <w:lsdException w:name="List Table 5 Dark Accent 6"/>
-            <w:lsdException w:name="List Table 6 Colorful Accent 6"/>
-            <w:lsdException w:name="List Table 7 Colorful Accent 6"/>
-            <w:lsdException w:name="Mention"/>
-            <w:lsdException w:name="Smart Hyperlink"/>
-            <w:lsdException w:name="Hashtag"/>
-            <w:lsdException w:name="Unresolved Mention"/>
-            <w:lsdException w:name="Smart Link"/>
         </w:latentStyles>
         <w:style w:type="paragraph" w:default="on" w:styleId="a">
             <w:name w:val="Normal"/>
@@ -727,6 +516,7 @@
             <wsp:rsid wsp:val="00382945"/>
             <wsp:rsid wsp:val="003918DA"/>
             <wsp:rsid wsp:val="003933A8"/>
+            <wsp:rsid wsp:val="003E158F"/>
             <wsp:rsid wsp:val="004B73BB"/>
             <wsp:rsid wsp:val="004E2F3F"/>
             <wsp:rsid wsp:val="00566BF8"/>
@@ -752,6 +542,7 @@
             <wsp:rsid wsp:val="00D13FA2"/>
             <wsp:rsid wsp:val="00DA6EE8"/>
             <wsp:rsid wsp:val="00DC54CA"/>
+            <wsp:rsid wsp:val="00E72C64"/>
             <wsp:rsid wsp:val="00E96BDB"/>
         </wsp:rsids>
     </w:docPr>
@@ -891,9 +682,9 @@
                         </w:p>
                     </w:tc>
                 </w:tr>
-                <w:tr wsp:rsidR="003918DA" wsp:rsidRPr="003918DA" wsp:rsidTr="003918DA">
+                <w:tr wsp:rsidR="003918DA" wsp:rsidRPr="003918DA" wsp:rsidTr="00E72C64">
                     <w:trPr>
-                        <w:trHeight w:val="392"/>
+                        <w:trHeight w:val="340"/>
                     </w:trPr>
                     <w:tc>
                         <w:tcPr>
@@ -1071,9 +862,9 @@
                     </w:tc>
                 </w:tr>
                 <#list ordersList as order>
-                    <w:tr wsp:rsidR="003918DA" wsp:rsidRPr="003918DA" wsp:rsidTr="003918DA">
+                    <w:tr wsp:rsidR="003918DA" wsp:rsidRPr="003918DA" wsp:rsidTr="00E72C64">
                         <w:trPr>
-                            <w:trHeight w:val="392"/>
+                            <w:trHeight w:val="340"/>
                         </w:trPr>
                         <w:tc>
                             <w:tcPr>
@@ -1249,9 +1040,9 @@
                         </w:tc>
                     </w:tr>
                 </#list>
-                <w:tr wsp:rsidR="003918DA" wsp:rsidRPr="003918DA" wsp:rsidTr="003918DA">
+                <w:tr wsp:rsidR="003918DA" wsp:rsidRPr="003918DA" wsp:rsidTr="00E72C64">
                     <w:trPr>
-                        <w:trHeight w:val="392"/>
+                        <w:trHeight w:val="340"/>
                     </w:trPr>
                     <w:tc>
                         <w:tcPr>
@@ -1354,9 +1145,9 @@
                         </w:p>
                     </w:tc>
                 </w:tr>
-                <w:tr wsp:rsidR="003918DA" wsp:rsidRPr="003918DA" wsp:rsidTr="003918DA">
+                <w:tr wsp:rsidR="003918DA" wsp:rsidRPr="003918DA" wsp:rsidTr="00E72C64">
                     <w:trPr>
-                        <w:trHeight w:val="392"/>
+                        <w:trHeight w:val="340"/>
                     </w:trPr>
                     <w:tc>
                         <w:tcPr>

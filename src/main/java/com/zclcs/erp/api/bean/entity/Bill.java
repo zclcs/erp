@@ -13,7 +13,6 @@ import lombok.experimental.SuperBuilder;
 
 import java.io.Serial;
 import java.io.Serializable;
-import java.math.BigDecimal;
 
 /**
  * 对账单 Entity
@@ -46,12 +45,6 @@ public class Bill implements Serializable {
     private Long companyId;
 
     /**
-     * 公司名称
-     */
-    @Column("company_name")
-    private String companyName;
-
-    /**
      * 对账单生成日期
      */
     @Column("delivery_date")
@@ -62,12 +55,6 @@ public class Bill implements Serializable {
      */
     @Column("name")
     private String name;
-
-    /**
-     * 总金额
-     */
-    @Column("total_amount")
-    private BigDecimal totalAmount;
 
 
 }

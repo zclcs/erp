@@ -12,6 +12,7 @@ import com.zclcs.erp.core.base.BasePage;
 import com.zclcs.erp.core.base.BasePageAo;
 import com.zclcs.erp.exception.FieldException;
 import com.zclcs.erp.mapper.ProductCompanyMapper;
+import com.zclcs.erp.mapper.PurchaseMapper;
 import com.zclcs.erp.service.ProductCompanyService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,6 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.zclcs.erp.api.bean.entity.table.ProductCompanyTableDef.PRODUCT_COMPANY;
+import static com.zclcs.erp.api.bean.entity.table.PurchaseTableDef.PURCHASE;
 
 /**
  * 进货公司 Service实现
@@ -33,6 +35,8 @@ import static com.zclcs.erp.api.bean.entity.table.ProductCompanyTableDef.PRODUCT
 @Service
 @RequiredArgsConstructor
 public class ProductCompanyServiceImpl extends ServiceImpl<ProductCompanyMapper, ProductCompany> implements ProductCompanyService {
+
+    private final PurchaseMapper purchaseMapper;
 
     @Override
     public BasePage<ProductCompanyVo> findProductCompanyPage(BasePageAo basePageAo, ProductCompanyVo productCompanyVo) {
@@ -139,6 +143,10 @@ public class ProductCompanyServiceImpl extends ServiceImpl<ProductCompanyMapper,
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void deleteProductCompany(List<Long> ids) {
+        if (purchaseMapper.selectCountByQuery(
+                new QueryWrapper().where(PURCHASE.PRODUCT_COMPANY_ID.in(ids))) != 0L) {
+            throw new FieldException("该公司已创建进货单，不能删除，请删除对应进货单之后再操作");
+        }
         this.removeByIds(ids);
     }
 

@@ -12,7 +12,6 @@ import com.mybatisflex.core.query.If;
 import com.mybatisflex.core.query.QueryWrapper;
 import com.mybatisflex.spring.service.impl.ServiceImpl;
 import com.zclcs.erp.api.bean.ao.OrdersAo;
-import com.zclcs.erp.api.bean.entity.Company;
 import com.zclcs.erp.api.bean.entity.Orders;
 import com.zclcs.erp.api.bean.entity.SystemConfig;
 import com.zclcs.erp.api.bean.vo.ChildOrderVo;
@@ -40,6 +39,7 @@ import static com.mybatisflex.core.query.QueryMethods.groupConcat;
 import static com.mybatisflex.core.query.QueryMethods.sum;
 import static com.zclcs.erp.api.bean.entity.table.ChildOrderBillTableDef.CHILD_ORDER_BILL;
 import static com.zclcs.erp.api.bean.entity.table.ChildOrderTableDef.CHILD_ORDER;
+import static com.zclcs.erp.api.bean.entity.table.CompanyTableDef.COMPANY;
 import static com.zclcs.erp.api.bean.entity.table.OrdersTableDef.ORDERS;
 
 /**
@@ -88,23 +88,22 @@ public class OrdersServiceImpl extends ServiceImpl<OrdersMapper, Orders> impleme
         queryWrapper.select(
                         ORDERS.ID,
                         ORDERS.COMPANY_ID,
-                        ORDERS.COMPANY_NAME,
+                        COMPANY.NAME.as("companyName"),
                         ORDERS.DELIVERY_DATE,
-                        ORDERS.ORDERS_STATUS,
                         sum(CHILD_ORDER.AMOUNT).as("totalAmount"),
                         groupConcat(CHILD_ORDER.ID).as("totalChildOrderId")
-                ).leftJoin(CHILD_ORDER).on(ORDERS.ID.eq(CHILD_ORDER.ORDERS_ID))
-                .where(ORDERS.COMPANY_NAME.like(ordersVo.getCompanyName(), If::hasText))
+                )
+                .innerJoin(COMPANY).on(ORDERS.COMPANY_ID.eq(COMPANY.ID))
+                .leftJoin(CHILD_ORDER).on(ORDERS.ID.eq(CHILD_ORDER.ORDERS_ID))
+                .where(COMPANY.NAME.like(ordersVo.getCompanyName(), If::hasText))
                 .and(ORDERS.COMPANY_ID.eq(ordersVo.getCompanyId()))
-                .and(ORDERS.ORDERS_STATUS.eq(ordersVo.getOrdersStatus(), If::notNull))
                 .and(ORDERS.ID.eq(ordersVo.getId()))
-                .orderBy(ORDERS.ID.desc())
+                .orderBy(ORDERS.DELIVERY_DATE.desc())
                 .groupBy(
                         ORDERS.ID,
                         ORDERS.COMPANY_ID,
-                        ORDERS.COMPANY_NAME,
-                        ORDERS.DELIVERY_DATE,
-                        ORDERS.ORDERS_STATUS
+                        COMPANY.NAME,
+                        ORDERS.DELIVERY_DATE
                 )
         ;
         String deliveryDateMonth = ordersVo.getDeliveryDateMonth();
@@ -120,7 +119,6 @@ public class OrdersServiceImpl extends ServiceImpl<OrdersMapper, Orders> impleme
     public Orders createOrders(OrdersAo ordersAo) {
         Orders orders = new Orders();
         BeanUtil.copyProperties(ordersAo, orders);
-        setOrders(orders);
         this.save(orders);
         return orders;
     }
@@ -130,7 +128,6 @@ public class OrdersServiceImpl extends ServiceImpl<OrdersMapper, Orders> impleme
     public Orders updateOrders(OrdersAo ordersAo) {
         Orders orders = new Orders();
         BeanUtil.copyProperties(ordersAo, orders);
-        setOrders(orders);
         this.updateById(orders);
         return orders;
     }
@@ -204,7 +201,7 @@ public class OrdersServiceImpl extends ServiceImpl<OrdersMapper, Orders> impleme
         dataMap.put("smallTotalAmount", totalAmount);
         dataMap.put("bigTotalAmount", Convert.digitToChinese(totalAmount));
         List<ChildOrderVo> childOrderList = childOrderService.findChildOrderList(ChildOrderVo.builder().ordersId(orders.getId()).build());
-        if (CollectionUtil.isNotEmpty(childOrderList)) {
+        if (CollectionUtil.isEmpty(childOrderList)) {
             for (int i = 0; i < 6; i++) {
                 ChildOrderVo childOrderVo = new ChildOrderVo();
                 childOrderList.add(childOrderVo);
@@ -224,11 +221,6 @@ public class OrdersServiceImpl extends ServiceImpl<OrdersMapper, Orders> impleme
             log.error(e.getMessage(), e);
             throw new MyException("文件生成异常");
         }
-    }
-
-    private void setOrders(Orders orders) {
-        Company byId = companyService.getById(orders.getCompanyId());
-        orders.setCompanyName(byId.getName());
     }
 
 }

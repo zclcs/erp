@@ -10,7 +10,6 @@ import com.mybatisflex.core.query.If;
 import com.mybatisflex.core.query.QueryWrapper;
 import com.mybatisflex.spring.service.impl.ServiceImpl;
 import com.zclcs.erp.api.bean.ao.PurchaseAo;
-import com.zclcs.erp.api.bean.entity.ProductCompany;
 import com.zclcs.erp.api.bean.entity.Purchase;
 import com.zclcs.erp.api.bean.vo.PurchaseVo;
 import com.zclcs.erp.core.base.BasePage;
@@ -26,6 +25,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.zclcs.erp.api.bean.entity.table.ProductCompanyTableDef.PRODUCT_COMPANY;
 import static com.zclcs.erp.api.bean.entity.table.PurchaseTableDef.PURCHASE;
 
 /**
@@ -71,11 +71,12 @@ public class PurchaseServiceImpl extends ServiceImpl<PurchaseMapper, Purchase> i
         queryWrapper.select(
                         PURCHASE.ID,
                         PURCHASE.PRODUCT_COMPANY_ID,
-                        PURCHASE.PRODUCT_COMPANY_NAME,
+                        PRODUCT_COMPANY.NAME,
                         PURCHASE.PURCHASE_DATE,
                         PURCHASE.PURCHASE_AMOUNT
                 )
-                .where(PURCHASE.PRODUCT_COMPANY_NAME.like(purchaseVo.getProductCompanyName(), If::hasText))
+                .innerJoin(PRODUCT_COMPANY).on(PURCHASE.PRODUCT_COMPANY_ID.eq(PRODUCT_COMPANY.ID))
+                .where(PRODUCT_COMPANY.NAME.like(purchaseVo.getProductCompanyName(), If::hasText))
         ;
         String purchaseDateMonth = purchaseVo.getPurchaseDateMonth();
         if (StrUtil.isNotBlank(purchaseDateMonth)) {
@@ -90,7 +91,6 @@ public class PurchaseServiceImpl extends ServiceImpl<PurchaseMapper, Purchase> i
     public Purchase createPurchase(PurchaseAo purchaseAo) {
         Purchase purchase = new Purchase();
         BeanUtil.copyProperties(purchaseAo, purchase);
-        setPurchase(purchase);
         this.save(purchase);
         return purchase;
     }
@@ -100,7 +100,6 @@ public class PurchaseServiceImpl extends ServiceImpl<PurchaseMapper, Purchase> i
     public Purchase updatePurchase(PurchaseAo purchaseAo) {
         Purchase purchase = new Purchase();
         BeanUtil.copyProperties(purchaseAo, purchase);
-        setPurchase(purchase);
         this.updateById(purchase);
         return purchase;
     }
@@ -153,11 +152,6 @@ public class PurchaseServiceImpl extends ServiceImpl<PurchaseMapper, Purchase> i
     @Transactional(rollbackFor = Exception.class)
     public void deletePurchase(List<Long> ids) {
         this.removeByIds(ids);
-    }
-
-    private void setPurchase(Purchase purchase) {
-        ProductCompany byId = productCompanyService.getById(purchase.getProductCompanyId());
-        purchase.setProductCompanyName(byId.getName());
     }
 
 }

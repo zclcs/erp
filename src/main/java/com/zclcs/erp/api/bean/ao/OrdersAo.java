@@ -2,7 +2,6 @@ package com.zclcs.erp.api.bean.ao;
 
 import com.zclcs.erp.core.strategy.ValidGroups;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
 import lombok.*;
 import lombok.experimental.Accessors;
 
@@ -42,25 +41,11 @@ public class OrdersAo implements Serializable {
     private Long companyId;
 
     /**
-     * 公司名称
-     * 默认值：
-     */
-    @Size(max = 255, message = "{noMoreThan}")
-    private String companyName;
-
-    /**
      * 送货日期
      * 默认值：
      */
     @NotNull(message = "{required}")
     private LocalDate deliveryDate;
-
-    /**
-     * 状态 1 有效 0 删除
-     * 默认值：
-     */
-    @NotNull(message = "{required}")
-    private Integer ordersStatus;
 
 
 }

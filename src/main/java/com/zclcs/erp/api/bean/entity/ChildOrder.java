@@ -52,12 +52,6 @@ public class ChildOrder implements Serializable {
     private Long productId;
 
     /**
-     * 子产品名称
-     */
-    @Column("product_name")
-    private String productName;
-
-    /**
      * 规格型号/桶
      */
     @Column("specification")
@@ -92,12 +86,6 @@ public class ChildOrder implements Serializable {
      */
     @Column("remark")
     private String remark;
-
-    /**
-     * 状态 1 有效 0 删除
-     */
-    @Column("child_order_status")
-    private Integer childOrderStatus;
 
 
 }

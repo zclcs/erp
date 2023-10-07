@@ -62,12 +62,6 @@ public class OrdersVo implements Serializable {
     private String deliveryDateMonth;
 
     /**
-     * 状态 1 有效 0 删除
-     * 默认值：
-     */
-    private Integer ordersStatus;
-
-    /**
      * 总金额
      */
     private BigDecimal totalAmount;

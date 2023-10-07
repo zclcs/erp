@@ -42,6 +42,7 @@ import static com.mybatisflex.core.query.QueryMethods.sum;
 import static com.zclcs.erp.api.bean.entity.table.BillTableDef.BILL;
 import static com.zclcs.erp.api.bean.entity.table.ChildOrderBillTableDef.CHILD_ORDER_BILL;
 import static com.zclcs.erp.api.bean.entity.table.ChildOrderTableDef.CHILD_ORDER;
+import static com.zclcs.erp.api.bean.entity.table.CompanyTableDef.COMPANY;
 
 /**
  * 对账单 Service实现
@@ -90,21 +91,22 @@ public class BillServiceImpl extends ServiceImpl<BillMapper, Bill> implements Bi
         queryWrapper.select(
                         BILL.ID,
                         BILL.COMPANY_ID,
-                        BILL.COMPANY_NAME,
+                        COMPANY.NAME.as("companyName"),
                         BILL.DELIVERY_DATE,
                         BILL.NAME,
                         sum(CHILD_ORDER.AMOUNT).as("totalAmount")
                 )
+                .innerJoin(COMPANY).on(BILL.COMPANY_ID.eq(COMPANY.ID))
                 .leftJoin(CHILD_ORDER_BILL).on(CHILD_ORDER_BILL.BILL_ID.eq(BILL.ID))
                 .leftJoin(CHILD_ORDER).on(CHILD_ORDER.ID.eq(CHILD_ORDER_BILL.CHILD_ORDER_ID))
                 .where(BILL.DELIVERY_DATE.eq(billVo.getDeliveryDateMonth(), If::hasText))
-                .and(BILL.COMPANY_NAME.like(billVo.getCompanyName(), If::hasText))
+                .and(COMPANY.NAME.like(billVo.getCompanyName(), If::hasText))
                 .and(BILL.ID.eq(billVo.getId()))
                 .orderBy(BILL.DELIVERY_DATE.desc())
                 .groupBy(
                         BILL.ID,
                         BILL.COMPANY_ID,
-                        BILL.COMPANY_NAME,
+                        COMPANY.NAME,
                         BILL.DELIVERY_DATE,
                         BILL.NAME
                 )
@@ -139,7 +141,6 @@ public class BillServiceImpl extends ServiceImpl<BillMapper, Bill> implements Bi
             bill.setName(companyVo.getName() + deliveryDateMonthChinese + "-对账单");
             bill.setDeliveryDate(deliveryDateMonth);
             bill.setCompanyId(companyVo.getId());
-            bill.setCompanyName(companyVo.getName());
             List<Long> childOrderIds = new ArrayList<>();
             for (OrdersVo ordersVo : ordersList) {
                 childOrderIds.addAll(ordersVo.getTotalChildOrderId());
