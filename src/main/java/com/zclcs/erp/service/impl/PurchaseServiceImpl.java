@@ -71,12 +71,13 @@ public class PurchaseServiceImpl extends ServiceImpl<PurchaseMapper, Purchase> i
         queryWrapper.select(
                         PURCHASE.ID,
                         PURCHASE.PRODUCT_COMPANY_ID,
-                        PRODUCT_COMPANY.NAME,
+                        PRODUCT_COMPANY.NAME.as("productCompanyName"),
                         PURCHASE.PURCHASE_DATE,
                         PURCHASE.PURCHASE_AMOUNT
                 )
                 .innerJoin(PRODUCT_COMPANY).on(PURCHASE.PRODUCT_COMPANY_ID.eq(PRODUCT_COMPANY.ID))
                 .where(PRODUCT_COMPANY.NAME.like(purchaseVo.getProductCompanyName(), If::hasText))
+                .orderBy(PURCHASE.ID.desc())
         ;
         String purchaseDateMonth = purchaseVo.getPurchaseDateMonth();
         if (StrUtil.isNotBlank(purchaseDateMonth)) {
