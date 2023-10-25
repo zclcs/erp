@@ -140,8 +140,10 @@
                 window.remove(obj);
             } else if (obj.event === 'edit') {
                 window.edit(obj);
-            } else if (obj.event === 'billing') {
-                window.billing(obj);
+            } else if (obj.event === 'billingDoc') {
+                window.billingDoc(obj);
+            } else if (obj.event === 'billingPdf') {
+                window.billingPdf(obj);
             } else if (obj.event === 'addProject') {
                 window.addProject(obj);
             }

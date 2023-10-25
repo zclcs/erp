@@ -92,6 +92,8 @@ public class MyBatisNativeConfiguration {
                     .registerPattern("mapper/*")
                     .registerPattern("templates/*")
                     .registerPattern("sql/*")
+                    .registerPattern("font/*")
+                    .registerPattern("com/itextpdf/html2pdf/default.css")
             ;
         }
     }

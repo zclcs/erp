@@ -2,8 +2,8 @@
 <html>
 
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
     <title>${title}</title>
     <style>
         body,
@@ -100,7 +100,7 @@
             line-height: 1.6;
             color: #333;
             color: rgba(0, 0, 0, .85);
-            font: 14px Helvetica Neue, Helvetica, PingFang SC, Tahoma, Arial, sans-serif;
+            font: 14px SimSun;
         }
 
         hr {
@@ -3936,7 +3936,7 @@
             width: 100%;
             margin: 10px 0;
             background-color: #fff;
-            color: #5F5F5F;
+            color: #000000;
         }
 
         .layui-table tr {
@@ -6866,6 +6866,10 @@
         .layui-table th {
             text-align: center;
         }
+
+        .layui-table td, .layui-table th, .layui-table-col-set, .layui-table-fixed-r, .layui-table-grid-down, .layui-table-header, .layui-table-page, .layui-table-tips-main, .layui-table-tool, .layui-table-total, .layui-table-view, .layui-table[lay-skin=line], .layui-table[lay-skin=row] {
+            border-color: rgba(0, 0, 0);
+        }
     </style>
 </head>
 
@@ -6878,9 +6882,8 @@
         <div class="layui-col-md-offset-3 layui-col-md-6">
             <table class="layui-table" lay-size="sm" style="text-align: center;">
                 <colgroup>
-                    <col width="150">
-                    <col width="150">
-                    <col>
+                    <col width="150"/>
+                    <col width="150"/>
                 </colgroup>
                 <thead>
                 <tr>
@@ -6916,7 +6919,7 @@
                 <tr>
                     <td>合计（大写）：${bigTotalAmount}</td>
                     <td>合计（小写）：${smallTotalAmount}</td>
-                <tr>
+                </tr>
                 </tbody>
             </table>
         </div>
@@ -6929,7 +6932,7 @@
                     <td style="text-align: left;">业务员：${salesman}</td>
                     <td>联系电话：${phone}</td>
                     <td style="text-align: right;">${date}</td>
-                <tr>
+                </tr>
                 </tbody>
             </table>
         </div>

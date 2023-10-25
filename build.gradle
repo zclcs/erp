@@ -27,6 +27,14 @@ configurations {
     }
 }
 
+graalvmNative {
+    binaries {
+        main {
+            buildArgs.add('-H:+AddAllCharsets')
+        }
+    }
+}
+
 repositories {
     mavenCentral()
 }

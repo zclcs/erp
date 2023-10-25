@@ -100,7 +100,7 @@
             line-height: 1.6;
             color: #333;
             color: rgba(0, 0, 0, .85);
-            font: 14px Helvetica Neue, Helvetica, PingFang SC, Tahoma, Arial, sans-serif;
+            font: 14px SimSun;
         }
 
         hr {
@@ -3936,7 +3936,7 @@
             width: 100%;
             margin: 10px 0;
             background-color: #fff;
-            color: #5F5F5F;
+            color: #000000;
         }
 
         .layui-table tr {
@@ -6865,6 +6865,10 @@
 
         .layui-table th {
             text-align: center;
+        }
+
+        .layui-table td, .layui-table th, .layui-table-col-set, .layui-table-fixed-r, .layui-table-grid-down, .layui-table-header, .layui-table-page, .layui-table-tips-main, .layui-table-tool, .layui-table-total, .layui-table-view, .layui-table[lay-skin=line], .layui-table[lay-skin=row] {
+            border-color: rgba(0, 0, 0);
         }
     </style>
 </head>

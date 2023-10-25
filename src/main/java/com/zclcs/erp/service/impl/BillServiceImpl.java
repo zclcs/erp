@@ -27,6 +27,7 @@ import com.zclcs.erp.utils.GenDocUtil;
 import com.zclcs.erp.utils.WebUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.core.io.support.ResourcePatternResolver;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
@@ -60,6 +61,7 @@ public class BillServiceImpl extends ServiceImpl<BillMapper, Bill> implements Bi
     private final ChildOrderBillService childOrderBillService;
     private final ChildOrderService childOrderService;
     private final SystemConfigService systemConfigService;
+    private final ResourcePatternResolver resourcePatternResolver;
 
     @Override
     public BasePage<BillVo> findBillPage(BasePageAo basePageAo, BillVo billVo) {
@@ -213,7 +215,7 @@ public class BillServiceImpl extends ServiceImpl<BillMapper, Bill> implements Bi
                 File file = GenDocUtil.genDoc(this.getClass(), "bill.ftl", dataMap);
                 WebUtil.download(file, bill.getName() + ".doc", true);
             } else {
-                File file = GenDocUtil.genPdf(this.getClass(), "billPdf.ftl", dataMap);
+                File file = GenDocUtil.genPdf(this.getClass(), "billPdf.ftl", one.getTitle(), dataMap, resourcePatternResolver.getResource("classpath:font/simsun.ttc"));
                 WebUtil.download(file, bill.getName() + ".pdf", true);
             }
         } catch (Exception e) {

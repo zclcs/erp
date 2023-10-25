@@ -135,8 +135,10 @@
         table.on('tool(page-table)', function (obj) {
             if (obj.event === 'remove') {
                 window.remove(obj);
-            } else if (obj.event === 'billing') {
-                window.billing(obj);
+            } else if (obj.event === 'billingDoc') {
+                window.billingDoc(obj);
+            } else if (obj.event === 'billingPdf') {
+                window.billingPdf(obj);
             } else if (obj.event === 'viewProject') {
                 window.viewProject(obj);
             }

@@ -20,11 +20,15 @@ import com.zclcs.erp.core.base.BasePage;
 import com.zclcs.erp.core.base.BasePageAo;
 import com.zclcs.erp.exception.MyException;
 import com.zclcs.erp.mapper.OrdersMapper;
-import com.zclcs.erp.service.*;
+import com.zclcs.erp.service.ChildOrderBillService;
+import com.zclcs.erp.service.ChildOrderService;
+import com.zclcs.erp.service.OrdersService;
+import com.zclcs.erp.service.SystemConfigService;
 import com.zclcs.erp.utils.GenDocUtil;
 import com.zclcs.erp.utils.WebUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.core.io.support.ResourcePatternResolver;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -55,8 +59,8 @@ public class OrdersServiceImpl extends ServiceImpl<OrdersMapper, Orders> impleme
 
     private final SystemConfigService systemConfigService;
     private final ChildOrderService childOrderService;
-    private final CompanyService companyService;
     private final ChildOrderBillService childOrderBillService;
+    private final ResourcePatternResolver resourcePatternResolver;
 
     @Override
     public BasePage<OrdersVo> findOrdersPage(BasePageAo basePageAo, OrdersVo ordersVo) {
@@ -219,7 +223,7 @@ public class OrdersServiceImpl extends ServiceImpl<OrdersMapper, Orders> impleme
                 File file = GenDocUtil.genDoc(this.getClass(), "order.ftl", dataMap);
                 WebUtil.download(file, orders.getCompanyName() + "-" + orders.getDeliveryDate().format(DatePattern.NORM_DATE_FORMATTER) + "-" + "送货单.doc", true);
             } else {
-                File file = GenDocUtil.genPdf(this.getClass(), "orderPdf.ftl", dataMap);
+                File file = GenDocUtil.genPdf(this.getClass(), "orderPdf.ftl", one.getTitle(), dataMap, resourcePatternResolver.getResource("classpath:font/simsun.ttc"));
                 WebUtil.download(file, orders.getCompanyName() + "-" + orders.getDeliveryDate().format(DatePattern.NORM_DATE_FORMATTER) + "-" + "送货单.pdf", true);
             }
         } catch (Exception e) {
