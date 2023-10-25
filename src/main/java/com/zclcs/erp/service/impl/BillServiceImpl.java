@@ -169,7 +169,7 @@ public class BillServiceImpl extends ServiceImpl<BillMapper, Bill> implements Bi
     }
 
     @Override
-    public void exportBill(Long id) {
+    public void exportBill(Long id, Integer type) {
         BillVo bill = this.findBill(BillVo.builder().id(id).build());
         DateTime deliveryDate = DateUtil.parse(bill.getDeliveryDate(), DatePattern.NORM_MONTH_FORMAT);
         SystemConfig one = systemConfigService.getOne(new QueryWrapper().limit(1));
@@ -189,14 +189,15 @@ public class BillServiceImpl extends ServiceImpl<BillMapper, Bill> implements Bi
         dataMap.put("deliveryDateString", NumberChineseFormatter.format(
                 DateUtil.month(deliveryDate) + 1, false, false) + "月份");
         dataMap.put("year", DateUtil.year(deliveryDate) + "年");
+        int maxCount = type == 1 ? 22 : 26;
         if (CollectionUtil.isEmpty(childOrderBillList)) {
-            for (int i = 0; i < 22; i++) {
+            for (int i = 0; i < maxCount; i++) {
                 ChildOrderVo childOrderVo = new ChildOrderVo();
                 childOrderBillList.add(childOrderVo);
             }
         } else {
             int listSize = childOrderBillList.size();
-            for (int i = 22; i > listSize; i--) {
+            for (int i = maxCount; i > listSize; i--) {
                 ChildOrderVo childOrderVo = new ChildOrderVo();
                 childOrderBillList.add(childOrderVo);
             }
@@ -208,8 +209,13 @@ public class BillServiceImpl extends ServiceImpl<BillMapper, Bill> implements Bi
         }
         dataMap.put("billList", childOrderBillList);
         try {
-            File file = GenDocUtil.genDoc(this.getClass(), "bill.ftl", dataMap);
-            WebUtil.download(file, bill.getName() + ".doc", true);
+            if (type == 1) {
+                File file = GenDocUtil.genDoc(this.getClass(), "bill.ftl", dataMap);
+                WebUtil.download(file, bill.getName() + ".doc", true);
+            } else {
+                File file = GenDocUtil.genPdf(this.getClass(), "billPdf.ftl", dataMap);
+                WebUtil.download(file, bill.getName() + ".pdf", true);
+            }
         } catch (Exception e) {
             log.error(e.getMessage(), e);
             throw new MyException("文件生成异常");

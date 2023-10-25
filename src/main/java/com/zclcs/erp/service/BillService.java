@@ -68,8 +68,9 @@ public interface BillService extends IService<Bill> {
     /**
      * 生成对账单
      *
-     * @param id id
+     * @param id   id
+     * @param type 1 doc 2 pdf
      */
-    void exportBill(Long id);
+    void exportBill(Long id, Integer type);
 
 }

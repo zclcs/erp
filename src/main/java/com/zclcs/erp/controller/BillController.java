@@ -110,11 +110,12 @@ public class BillController {
     /**
      * 导出对账单
      *
-     * @param id id
+     * @param id   id
+     * @param type 1 doc 2 pdf
      */
     @GetMapping("/exportBill")
-    public void exportBill(@NotNull(message = "{required}") @RequestParam Long id) {
-        billService.exportBill(id);
+    public void exportBill(@NotNull(message = "{required}") @RequestParam Long id, @NotNull(message = "{required}") @RequestParam Integer type) {
+        billService.exportBill(id, type);
     }
 
 }

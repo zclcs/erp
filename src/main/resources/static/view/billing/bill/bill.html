@@ -55,13 +55,17 @@
 </script>
 
 <script type="text/html" id="user-bar">
-    <button class="pear-btn pear-btn-primary pear-btn-sm" lay-event="billing">
-        <i class="layui-icon layui-icon-list"></i>
+    <button class="pear-btn pear-btn-primary pear-btn-sm" lay-event="billingDoc">
+        生成对账单doc
+    </button>
+    <button class="pear-btn pear-btn-primary pear-btn-sm" lay-event="billingPdf">
+        生成对账单pdf
     </button>
     <button class="pear-btn pear-btn-primary pear-btn-sm" lay-event="viewProject">
-        <i class="layui-icon layui-icon-eye"></i>
+        查看产品
     </button>
-    <button class="pear-btn pear-btn-danger pear-btn-sm" lay-event="remove"><i class="layui-icon layui-icon-delete"></i>
+    <button class="pear-btn pear-btn-danger pear-btn-sm" lay-event="remove">
+        删除
     </button>
 </script>
 
@@ -105,8 +109,10 @@
                 },
                 {
                     title: '操作',
+                    align: 'right',
+                    fixed: 'right',
+                    minWidth: '450',
                     toolbar: '#user-bar',
-                    align: 'right'
                 }
             ]
         ]
@@ -178,8 +184,12 @@
             });
         }
 
-        window.billing = function (obj) {
-            window.open("/bill/exportBill?id=" + obj.data.id)
+        window.billingDoc = function (obj) {
+            window.open("/bill/exportBill?type=1&id=" + obj.data.id)
+        }
+
+        window.billingPdf = function (obj) {
+            window.open("/bill/exportBill?type=2&id=" + obj.data.id)
         }
 
         window.viewProject = function (obj) {

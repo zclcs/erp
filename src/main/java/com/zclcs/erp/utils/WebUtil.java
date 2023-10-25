@@ -34,7 +34,7 @@ public class WebUtil {
     /**
      * 允许下载的文件类型，根据需求自己添加（小写）
      */
-    private static final String VALID_FILE_TYPE = "doc";
+    private static final String VALID_FILE_TYPE = ".doc,.pdf";
 
     /**
      * 判断是否为 ajax请求

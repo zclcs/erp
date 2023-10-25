@@ -167,11 +167,12 @@ public class OrdersController {
     /**
      * 导出送货单
      *
-     * @param id id
+     * @param id   id
+     * @param type 1 doc 2 pdf
      */
     @GetMapping("/exportOrders")
-    public void exportOrders(@NotNull(message = "{required}") @RequestParam Long id) {
-        ordersService.exportOrders(id);
+    public void exportOrders(@NotNull(message = "{required}") @RequestParam Long id, @NotNull(message = "{required}") @RequestParam Integer type) {
+        ordersService.exportOrders(id, type);
     }
 
 }

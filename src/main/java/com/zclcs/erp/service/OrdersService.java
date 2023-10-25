@@ -110,7 +110,8 @@ public interface OrdersService extends IService<Orders> {
     /**
      * 生成送货单
      *
-     * @param id id
+     * @param id   id
+     * @param type 1 doc 2 pdf
      */
-    void exportOrders(Long id);
+    void exportOrders(Long id, Integer type);
 }

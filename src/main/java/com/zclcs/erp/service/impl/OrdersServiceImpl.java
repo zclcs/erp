@@ -188,7 +188,7 @@ public class OrdersServiceImpl extends ServiceImpl<OrdersMapper, Orders> impleme
     }
 
     @Override
-    public void exportOrders(Long id) {
+    public void exportOrders(Long id, Integer type) {
         OrdersVo orders = findOrders(OrdersVo.builder().id(id).build());
         SystemConfig one = systemConfigService.getOne(new QueryWrapper().limit(1));
         Map<String, Object> dataMap = new HashMap<>(10);
@@ -215,8 +215,13 @@ public class OrdersServiceImpl extends ServiceImpl<OrdersMapper, Orders> impleme
         }
         dataMap.put("ordersList", childOrderList);
         try {
-            File file = GenDocUtil.genDoc(this.getClass(), "order.ftl", dataMap);
-            WebUtil.download(file, orders.getCompanyName() + "-" + orders.getDeliveryDate().format(DatePattern.NORM_DATE_FORMATTER) + "-" + "送货单.doc", true);
+            if (type == 1) {
+                File file = GenDocUtil.genDoc(this.getClass(), "order.ftl", dataMap);
+                WebUtil.download(file, orders.getCompanyName() + "-" + orders.getDeliveryDate().format(DatePattern.NORM_DATE_FORMATTER) + "-" + "送货单.doc", true);
+            } else {
+                File file = GenDocUtil.genPdf(this.getClass(), "orderPdf.ftl", dataMap);
+                WebUtil.download(file, orders.getCompanyName() + "-" + orders.getDeliveryDate().format(DatePattern.NORM_DATE_FORMATTER) + "-" + "送货单.pdf", true);
+            }
         } catch (Exception e) {
             log.error(e.getMessage(), e);
             throw new MyException("文件生成异常");

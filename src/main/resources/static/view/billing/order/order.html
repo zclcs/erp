@@ -55,15 +55,20 @@
 </script>
 
 <script type="text/html" id="user-bar">
-    <button class="pear-btn pear-btn-primary pear-btn-sm" lay-event="billing">
-        <i class="layui-icon layui-icon-list"></i>
+    <button class="pear-btn pear-btn-primary pear-btn-sm" lay-event="billingDoc">
+        生成送货单doc
+    </button>
+    <button class="pear-btn pear-btn-primary pear-btn-sm" lay-event="billingPdf">
+        生成送货单pdf
     </button>
     <button class="pear-btn pear-btn-primary pear-btn-sm" lay-event="addProject">
-        <i class="layui-icon layui-icon-add-1"></i>
+        添加产品
     </button>
-    <button class="pear-btn pear-btn-primary pear-btn-sm" lay-event="edit"><i class="layui-icon layui-icon-edit"></i>
+    <button class="pear-btn pear-btn-primary pear-btn-sm" lay-event="edit">
+        修改
     </button>
-    <button class="pear-btn pear-btn-danger pear-btn-sm" lay-event="remove"><i class="layui-icon layui-icon-delete"></i>
+    <button class="pear-btn pear-btn-danger pear-btn-sm" lay-event="remove">
+        删除
     </button>
 </script>
 
@@ -107,8 +112,10 @@
                 },
                 {
                     title: '操作',
+                    fixed: 'right',
+                    align: 'right',
+                    minWidth: '500',
                     toolbar: '#user-bar',
-                    align: 'right'
                 }
             ]
         ]
@@ -182,8 +189,12 @@
             });
         }
 
-        window.billing = function (obj) {
-            window.open("/orders/exportOrders?id=" + obj.data.id)
+        window.billingDoc = function (obj) {
+            window.open("/orders/exportOrders?type=1&id=" + obj.data.id)
+        }
+
+        window.billingPdf = function (obj) {
+            window.open("/orders/exportOrders?type=2&id=" + obj.data.id)
         }
 
         window.addProject = function (obj) {
